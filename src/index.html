@@ -3,7 +3,11 @@
 <head>
   <meta charset="utf-8">
   <title>KORUZA</title>
+  {{#if environment.production}}
+  <base href="/koruza/">
+  {{else}}
   <base href="/">
+  {{/if}}
 
   {{#unless environment.production}}
   <script src="/ember-cli-live-reload.js" type="text/javascript"></script>
