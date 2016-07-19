@@ -1,4 +1,5 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
+import {Router} from '@angular/router';
 import {Effect, StateUpdates} from '@ngrx/effects';
 import {Observable} from 'rxjs/Observable';
 
@@ -9,9 +10,17 @@ import {AuthenticationActions} from '../actions';
 
 @Injectable()
 export class AuthenticationEffects {
+  private _router: Router;
+
   constructor(private ubus: UbusService,
               private updates: StateUpdates<any>,
-              private actions: AuthenticationActions) {
+              private actions: AuthenticationActions,
+              private injector: Injector) {
+  }
+
+  private get router(): Router {
+    if (!this._router) this._router = this.injector.get(Router);
+    return this._router;
   }
 
   @Effect() login = this.updates
@@ -23,6 +32,9 @@ export class AuthenticationEffects {
         .catch(() => Observable.of(this.actions.loginFailed()))
     );
 
+  @Effect() loginRedirect = this.updates
+    .whenAction(AuthenticationActions.LOGIN_SUCCESS)
+    .do(() => this.router.navigate(['/']));
 
   @Effect() logout = this.updates
     .whenAction(AuthenticationActions.LOGOUT)

@@ -13,6 +13,36 @@ interface UbusSessionInfo {
 interface UbusLoginResponse {
   ubus_rpc_session: string;
   expires: number;
+  timeout: number;
+  data: {
+    username: string;
+  };
+}
+
+/**
+ * uBus response codes.
+ */
+export enum UbusStatus {
+  OK,
+  INVALID_COMMAND,
+  INVALID_ARGUMENT,
+  METHOD_NOT_FOUND,
+  NOT_FOUND,
+  NO_DATA,
+  PERMISSION_DENIED,
+  TIMEOUT,
+  NOT_SUPPORTED,
+  UNKNOWN_ERROR,
+  CONNECTION_FAILED
+}
+
+/**
+ * Errors returned by calls to uBus.
+ */
+export class UbusError extends Error {
+  constructor(public errorCode: UbusStatus) {
+    super(`uBus call has failed with error code ${errorCode}`);
+  }
 }
 
 /**
@@ -45,6 +75,15 @@ export class UbusService {
       method: 'call',
       id: 1,
       params: [sessionId, object, method, parameters]
+    }).map((response) => {
+      const body = response.json();
+      const resultCode: UbusStatus = body.result[0];
+
+      if (resultCode === UbusStatus.OK) {
+        return body.result[1];
+      } else {
+        throw new UbusError(resultCode);
+      }
     });
   }
 
@@ -80,7 +119,7 @@ export class UbusService {
       // TODO: What about session expiration?
 
       return {
-        username: username
+        username: response.data.username
       };
     });
   }

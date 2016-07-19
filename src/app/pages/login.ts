@@ -2,9 +2,14 @@ import {Component} from '@angular/core';
 import {FORM_DIRECTIVES} from '@angular/forms'
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
+import {MdSpinner} from '@angular2-material/progress-circle';
 import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs/Observable';
 
-import {AppState} from '../reducers';
+import 'rxjs/add/operator/let';
+
+import {AppState, getAuthenticationState} from '../reducers';
+import {isAuthenticating, hasAuthenticationFailed, isAuthenticated} from '../reducers/authentication';
 import {AuthenticationActions} from '../actions';
 
 @Component({
@@ -15,6 +20,9 @@ import {AuthenticationActions} from '../actions';
       <md-card flex>
         <md-card-title>Login</md-card-title>
         <md-card-content>
+          <div *ngIf="hasAuthenticationFailed | async" class="login-error">
+            Username and/or password are incorrect.
+          </div>
           <form
             layout="column"
             (ngSubmit)="onSubmit()"
@@ -37,7 +45,7 @@ import {AuthenticationActions} from '../actions';
               [(ngModel)]="user.password">
             </md-input>
 
-            <div flex layout="row">
+            <div *ngIf="!(isAuthenticating | async)" flex layout="row">
               <div flex></div>
               <button
                 type="submit"
@@ -46,16 +54,22 @@ import {AuthenticationActions} from '../actions';
                 Login
               </button>
             </div>
+            <div *ngIf="isAuthenticating | async" flex layout="row">
+              <div flex></div>
+              <md-spinner class="login-spinner"></md-spinner>
+            </div>
           </form>
         </md-card-content>
       </md-card>
       <div flex></div>
     </div>
   `,
+  styleUrls: ['app/pages/login.css'],
   directives: [
     FORM_DIRECTIVES,
     MD_CARD_DIRECTIVES,
-    MD_INPUT_DIRECTIVES
+    MD_INPUT_DIRECTIVES,
+    MdSpinner
   ]
 })
 export class LoginPageComponent {
@@ -66,6 +80,14 @@ export class LoginPageComponent {
     username: '',
     password: ''
   };
+
+  public isAuthenticating: Observable<boolean> = this.store
+    .let(getAuthenticationState())
+    .let(isAuthenticating());
+
+  public hasAuthenticationFailed: Observable<boolean> = this.store
+    .let(getAuthenticationState())
+    .let(hasAuthenticationFailed());
 
   constructor(private store: Store<AppState>,
               private actions: AuthenticationActions) {
