@@ -35,7 +35,14 @@ export class AuthenticationEffects {
 
   @Effect() loginRedirect = this.updates
     .whenAction(AuthenticationActions.LOGIN_SUCCESS)
-    .do(() => this.router.navigate(['/']));
+    .do(() => {
+      try {
+        this.router.navigate(['/']);
+      } catch (error) {
+        // If the router is not yet available, do not redirect as the application
+        // may still be bootstrapping.
+      }
+    });
 
   @Effect() loginInvalidateSession = this.updates
     .whenAction(AuthenticationActions.LOGIN_FAILED)
