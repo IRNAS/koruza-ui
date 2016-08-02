@@ -109,7 +109,8 @@ export class UbusService {
   public login(username: string, password: string): Observable<UbusSessionInfo> {
     return this._call('session', 'login', {
       username: username,
-      password: password
+      password: password,
+      timeout: 3600
     }).map((response: UbusLoginResponse) => {
       if (!response.ubus_rpc_session) {
         throw new Error('Received invalid response from session.login!');

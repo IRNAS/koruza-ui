@@ -19,7 +19,9 @@ import {MdToolbar} from '@angular2-material/toolbar';
     MdButton,
     MdToolbar
   ],
-  providers: [MdIconRegistry]
+  providers: [
+    MdIconRegistry
+  ]
 })
 export class AppComponent {
 }

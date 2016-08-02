@@ -5,6 +5,11 @@
 export const environment = {
   production: false,
   ubus: {
-    endpoint: 'http://localhost:8001/ubus'
+    endpoint: '/ubus'
+  },
+  webcam: {
+    host: 'localhost',
+    port: 8080,
+    path: '/?action=stream'
   }
 };

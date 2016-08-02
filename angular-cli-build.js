@@ -11,7 +11,9 @@ module.exports = function(defaults) {
       'rxjs/**/*.+(js|js.map)',
       '@angular/**/*.+(js|js.map)',
       '@angular2-material/**/*.+(js|js.map)',
-      '@ngrx/**/*.+(js|js.map)'
+      '@ngrx/**/*.+(js|js.map)',
+      'lodash/**/*.+(js|js.map)',
+      'lodash.**/**/*.+(js|js.map)',
     ]
   });
 };

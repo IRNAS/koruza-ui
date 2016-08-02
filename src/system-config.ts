@@ -9,6 +9,7 @@
 const map: any = {
   '@angular2-material': 'vendor/@angular2-material',
   '@ngrx': 'vendor/@ngrx',
+  'lodash': 'vendor/lodash',
 };
 
 /** User packages configuration. */
@@ -28,6 +29,9 @@ const packages: any = {
   '@ngrx/core': {main: 'index.js', format: 'cjs'},
   '@ngrx/store': {main: 'index.js', format: 'cjs'},
   '@ngrx/effects': {main: 'index.js', format: 'cjs'},
+
+  // Lodash.
+  'lodash': {main: 'index.js', defaultExtension: 'js'},
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

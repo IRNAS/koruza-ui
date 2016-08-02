@@ -28,21 +28,21 @@ import {AuthenticationActions} from '../actions';
             (ngSubmit)="onSubmit()"
             #loginForm="ngForm">
 
-            <md-input #username
+            <md-input
               flex
               required
               name="username"
               placeholder="Username"
-              [(ngModel)]="user.username">
+              [(ngModel)]="username">
             </md-input>
 
-            <md-input #password
+            <md-input
               flex
               required
               name="password"
               type="password"
               placeholder="Password"
-              [(ngModel)]="user.password">
+              [(ngModel)]="password">
             </md-input>
 
             <div *ngIf="!(isAuthenticating | async)" flex layout="row">
@@ -73,13 +73,8 @@ import {AuthenticationActions} from '../actions';
   ]
 })
 export class LoginPageComponent {
-  public user: {
-    username: string;
-    password: string;
-  } = {
-    username: '',
-    password: ''
-  };
+  public username: string = '';
+  public password: string = '';
 
   public isAuthenticating: Observable<boolean> = this.store
     .let(getAuthenticationState())
@@ -94,6 +89,6 @@ export class LoginPageComponent {
   }
 
   public onSubmit() {
-    this.store.dispatch(this.actions.login(this.user.username, this.user.password));
+    this.store.dispatch(this.actions.login(this.username, this.password));
   }
 }

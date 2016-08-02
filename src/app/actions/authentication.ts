@@ -7,20 +7,15 @@ export class AuthenticationActions {
   public login(username: string, password: string): Action {
     return {
       type: AuthenticationActions.LOGIN,
-      payload: {
-        username: username,
-        password: password
-      }
+      payload: { username, password }
     };
   }
 
   static LOGIN_SUCCESS = 'authentication.login_success';
-  public loginSuccess(username: string): Action {
+  public loginSuccess(username: string, password: string): Action {
     return {
       type: AuthenticationActions.LOGIN_SUCCESS,
-      payload: {
-        username: username
-      }
+      payload: { username, password }
     };
   }
 

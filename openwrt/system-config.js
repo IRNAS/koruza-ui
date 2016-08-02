@@ -8,6 +8,7 @@
 var map = {
     '@angular2-material': 'vendor/@angular2-material',
     '@ngrx': 'vendor/@ngrx',
+    'lodash': 'vendor/lodash',
 };
 /** User packages configuration. */
 var packages = {
@@ -25,6 +26,8 @@ var packages = {
     '@ngrx/core': { main: 'index.js', format: 'cjs' },
     '@ngrx/store': { main: 'index.js', format: 'cjs' },
     '@ngrx/effects': { main: 'index.js', format: 'cjs' },
+    // Lodash.
+    'lodash': { main: 'index.js', defaultExtension: 'js' },
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /***********************************************************************************************
