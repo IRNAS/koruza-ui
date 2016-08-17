@@ -1,8 +1,12 @@
 import {Component} from '@angular/core';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
 import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs/Observable';
 
-import {WebcamComponent} from '../components/webcam';
+import {AppState, getKoruzaState} from '../reducers';
+import {getCameraCalibration} from '../reducers/koruza';
+import {WebcamComponent, WebcamCalibration} from '../components/webcam';
 
 @Component({
   selector: 'dashboard-page',
@@ -10,7 +14,7 @@ import {WebcamComponent} from '../components/webcam';
     <div>
       WIP: Dashboard
 
-      <webcam></webcam>
+      <webcam [calibration]="cameraCalibration | async"></webcam>
     </div>
   `,
   directives: [
@@ -20,4 +24,10 @@ import {WebcamComponent} from '../components/webcam';
   ]
 })
 export class DashboardPageComponent {
+  private cameraCalibration: Observable<WebcamCalibration> = this.store
+    .let(getKoruzaState())
+    .let(getCameraCalibration());
+
+  constructor(private store: Store<AppState>) {
+  }
 }

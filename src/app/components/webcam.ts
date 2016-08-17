@@ -1,22 +1,74 @@
 import * as _ from 'lodash';
-import {Component} from '@angular/core';
+import {Component, Input, ViewChild, ElementRef} from '@angular/core';
 import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
+import {MdIcon} from '@angular2-material/icon';
 
 import {environment} from '../environment';
+
+const WEBCAM_WIDTH = 1280;
+const WEBCAM_HEIGHT = 720;
+
+const WEBCAM_CENTER_WIDTH = 40;
+const WEBCAM_CENTER_HEIGHT = 40;
+
+/**
+ * Webcam calibration data.
+ */
+export interface WebcamCalibration {
+  offsetX: number;
+  offsetY: number;
+}
 
 @Component({
   selector: 'webcam',
   template: `
     <md-card class="camera-container">
-      <img src="{{cameraUrl}}" class="camera" />
+      <img
+        #cameraImage
+        class="camera"
+        [src]="cameraUrl"
+        (load)="onCameraImageLoad()"
+        (window:resize)="onResize(event)"
+      />
+
+      <div
+        class="camera-center"
+        [style.width.px]="centerWidth"
+        [style.height.px]="centerHeight"
+        [style.left.px]="centerOffsetLeft"
+        [style.top.px]="centerOffsetTop"
+        *ngIf="centerWidth > 10"
+      >
+        <md-icon
+          class="camera-cross"
+          [style.left.px]="centerWidth / 4"
+          [style.top.px]="centerHeight / 4"
+          [style.width.px]="centerWidth / 2"
+          [style.height.px]="centerHeight / 2"
+          [style.fontSize.px]="(centerWidth + centerHeight) / 4"
+        >
+          add
+        </md-icon>
+      </div>
     </md-card>
   `,
   styleUrls: ['app/components/webcam.css'],
   directives: [
-    MD_CARD_DIRECTIVES
+    MD_CARD_DIRECTIVES,
+    MdIcon
   ]
 })
 export class WebcamComponent {
+  // Calibration data.
+  @Input() private calibration: WebcamCalibration;
+
+  @ViewChild('cameraImage') private cameraImage: ElementRef;
+
+  private centerWidth: number = 0;
+  private centerHeight: number = 0;
+  private centerOffsetLeft: number = 0;
+  private centerOffsetTop: number = 0;
+
   /**
    * Returns the URL of the camera image.
    */
@@ -27,5 +79,23 @@ export class WebcamComponent {
     });
 
     return `http://${config.host}:${config.port}${config.path}`;
+  }
+
+  private onResize(event): void {
+    this.recomputeCenterGeometry();
+  }
+
+  private onCameraImageLoad(): void {
+    this.recomputeCenterGeometry();
+  }
+
+  private recomputeCenterGeometry(): void {
+    // Compute offset based on the actual image size and calibrated offset.
+    const ratioWidth = this.cameraImage.nativeElement.offsetWidth / WEBCAM_WIDTH;
+    const ratioHeight = this.cameraImage.nativeElement.offsetHeight / WEBCAM_HEIGHT;
+    this.centerWidth = ratioWidth * WEBCAM_CENTER_WIDTH;
+    this.centerHeight = ratioHeight * WEBCAM_CENTER_HEIGHT;
+    this.centerOffsetLeft = ratioWidth * this.calibration.offsetX - this.centerWidth / 2;
+    this.centerOffsetTop = ratioHeight * this.calibration.offsetY - this.centerHeight / 2;
   }
 }

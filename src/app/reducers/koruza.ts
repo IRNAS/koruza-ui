@@ -65,3 +65,8 @@ export function reducer(state = initialState, action: Action): KoruzaState {
     }
   }
 };
+
+export function getCameraCalibration() {
+  return (state: Observable<KoruzaState>) =>
+    state.select(s => s.cameraCalibration);
+}
