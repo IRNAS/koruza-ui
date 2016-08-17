@@ -66,7 +66,7 @@ export class UbusService {
   private _call(object: string, method: string, parameters: any): Observable<any> {
     // The login method must be handled specially, as it requires a NULL session.
     let sessionId = this._sessionId;
-    if (object === 'session' && method === 'login') {
+    if (!sessionId || object === 'session' && method === 'login') {
       sessionId = '00000000000000000000000000000000';
     }
 
@@ -94,7 +94,7 @@ export class UbusService {
    * @param parameters Parameters object
    * @return A response observable
    */
-  public call(path: string, parameters: any): Observable<any> {
+  public call(path: string, parameters: any = {}): Observable<any> {
     const [object, method] = path.split('.');
     return this._call(object, method, parameters);
   }
