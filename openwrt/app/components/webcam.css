@@ -1,5 +1,14 @@
 .camera-container {
   text-align: center; }
 
+.camera-center {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  border: 2px dashed red; }
+  .camera-center md-icon {
+    position: absolute;
+    color: red; }
+
 .camera {
   width: 98%; }

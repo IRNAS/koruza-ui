@@ -9,6 +9,7 @@ var map = {
     '@angular2-material': 'vendor/@angular2-material',
     '@ngrx': 'vendor/@ngrx',
     'lodash': 'vendor/lodash',
+    'hammerjs': 'vendor/hammerjs',
 };
 /** User packages configuration. */
 var packages = {
@@ -22,12 +23,15 @@ var packages = {
     '@angular2-material/toolbar': { main: 'toolbar.js' },
     '@angular2-material/input': { main: 'input.js' },
     '@angular2-material/progress-circle': { main: 'progress-circle.js' },
+    '@angular2-material/slide-toggle': { main: 'slide-toggle.js' },
     // NgRX.
     '@ngrx/core': { main: 'index.js', format: 'cjs' },
     '@ngrx/store': { main: 'index.js', format: 'cjs' },
     '@ngrx/effects': { main: 'index.js', format: 'cjs' },
     // Lodash.
     'lodash': { main: 'index.js', defaultExtension: 'js' },
+    // HammerJS.
+    'hammerjs': { main: 'hammer.js', defaultExtension: 'js' },
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /***********************************************************************************************
@@ -53,6 +57,8 @@ var barrels = [
     'app/reducers',
     'app/services',
     'app/directives',
+    'app/pages',
+    'app/guards',
 ];
 var cliSystemConfigPackages = {};
 barrels.forEach(function (barrelName) {
