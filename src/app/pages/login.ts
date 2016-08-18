@@ -1,8 +1,4 @@
 import {Component} from '@angular/core';
-import {FORM_DIRECTIVES} from '@angular/forms'
-import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
-import {MD_INPUT_DIRECTIVES} from '@angular2-material/input';
-import {MdSpinner} from '@angular2-material/progress-circle';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 
@@ -65,12 +61,6 @@ import {AuthenticationActions} from '../actions';
     </div>
   `,
   styleUrls: ['app/pages/login.css'],
-  directives: [
-    FORM_DIRECTIVES,
-    MD_CARD_DIRECTIVES,
-    MD_INPUT_DIRECTIVES,
-    MdSpinner
-  ]
 })
 export class LoginPageComponent {
   public username: string = '';

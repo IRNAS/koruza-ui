@@ -12,8 +12,3 @@ export const routes: RouterConfig = [
   {path: 'login', component: LoginPageComponent},
   {path: 'dashboard', component: DashboardPageComponent, canActivate: [AuthenticationGuard]}
 ];
-
-export const routerProviders = [
-  provideRouter(routes),
-  AuthenticationGuard
-];

@@ -1,7 +1,5 @@
 import * as _ from 'lodash';
 import {Component, Input, ViewChild, ElementRef} from '@angular/core';
-import {MD_CARD_DIRECTIVES} from '@angular2-material/card';
-import {MdIcon} from '@angular2-material/icon';
 
 import {environment} from '../environment';
 
@@ -31,13 +29,19 @@ export interface WebcamCalibration {
         (window:resize)="onResize(event)"
       />
 
+      <div *ngIf="!cameraImageLoaded" layout="row">
+        <div flex></div>
+        <md-spinner></md-spinner>
+        <div flex></div>
+      </div>
+
       <div
         class="camera-center"
         [style.width.px]="centerWidth"
         [style.height.px]="centerHeight"
         [style.left.px]="centerOffsetLeft"
         [style.top.px]="centerOffsetTop"
-        *ngIf="centerWidth > 10"
+        *ngIf="cameraImageLoaded"
       >
         <md-icon
           class="camera-cross"
@@ -53,16 +57,14 @@ export interface WebcamCalibration {
     </md-card>
   `,
   styleUrls: ['app/components/webcam.css'],
-  directives: [
-    MD_CARD_DIRECTIVES,
-    MdIcon
-  ]
 })
 export class WebcamComponent {
   // Calibration data.
   @Input() private calibration: WebcamCalibration;
 
   @ViewChild('cameraImage') private cameraImage: ElementRef;
+
+  private cameraImageLoaded: boolean = false;
 
   private centerWidth: number = 0;
   private centerHeight: number = 0;
@@ -86,6 +88,7 @@ export class WebcamComponent {
   }
 
   private onCameraImageLoad(): void {
+    this.cameraImageLoaded = true;
     this.recomputeCenterGeometry();
   }
 

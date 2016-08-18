@@ -1,6 +1,6 @@
 import {Injectable, Injector} from '@angular/core';
 import {Router} from '@angular/router';
-import {Effect, StateUpdates} from '@ngrx/effects';
+import {Effect, Actions} from '@ngrx/effects';
 import {Observable} from 'rxjs/Observable';
 
 import 'rxjs/add/operator/switchMap';
@@ -13,61 +13,70 @@ export class AuthenticationEffects {
   private _router: Router;
 
   constructor(private ubus: UbusService,
-              private updates: StateUpdates<any>,
+              private updates: Actions,
               private actions: AuthenticationActions,
               private localStorage: LocalStorageService,
-              private injector: Injector) {
+              private router: Router) {
   }
 
-  private get router(): Router {
-    if (!this._router) this._router = this.injector.get(Router);
-    return this._router;
-  }
-
+  /**
+   * Handles the login via uBus.
+   */
   @Effect() login = this.updates
-    .whenAction(AuthenticationActions.LOGIN)
-    .map(update => update.action.payload)
+    .ofType(AuthenticationActions.LOGIN)
+    .map(update => update.payload)
     .switchMap(payload =>
       this.ubus.login(payload.username, payload.password)
         .map(session => this.actions.loginSuccess(session.username, payload.password))
         .catch(() => Observable.of(this.actions.loginFailed()))
     );
 
-  @Effect() loginRedirect = this.updates
-    .whenAction(AuthenticationActions.LOGIN_SUCCESS)
-    .do(() => {
-      try {
-        this.router.navigate(['/']);
-      } catch (error) {
-        // If the router is not yet available, do not redirect as the application
-        // may still be bootstrapping.
-      }
-    });
+  /**
+   * Performs a redirect after a successful login.
+   */
+  @Effect({dispatch: false}) loginRedirect = this.updates
+    .ofType(AuthenticationActions.LOGIN_SUCCESS)
+    .do(() => this.router.navigate(['/']));
 
-  @Effect() loginInvalidateSession = this.updates
-    .whenAction(AuthenticationActions.LOGIN_FAILED)
+  /**
+   * Invalidates the session after a failed login.
+   */
+  @Effect({dispatch: false}) loginInvalidateSession = this.updates
+    .ofType(AuthenticationActions.LOGIN_FAILED)
     .do(() => this.localStorage.removeItem('login.data'));
 
-  @Effect() loginStoreSession = this.updates
-    .whenAction(AuthenticationActions.LOGIN_SUCCESS)
+  /**
+   * Stores the login credentials after a successful login.
+   */
+  @Effect({dispatch: false}) loginStoreSession = this.updates
+    .ofType(AuthenticationActions.LOGIN_SUCCESS)
     .do((update) => this.localStorage.setItem('login.data', {
-      username: update.action.payload.username,
-      password: update.action.payload.password
+      username: update.payload.username,
+      password: update.payload.password
     }));
 
+  /**
+   * Restores an existing session when available.
+   */
   @Effect() loginRestoreSession = this.localStorage.getObservable('login.data')
     .filter((value) => !!value)
     .map((data) => this.actions.login(data.username, data.password));
 
+  /**
+   * Handles the logout via uBus.
+   */
   @Effect() logout = this.updates
-    .whenAction(AuthenticationActions.LOGOUT)
+    .ofType(AuthenticationActions.LOGOUT)
     .switchMap(action =>
       this.ubus.logout()
         .map(() => this.actions.logoutSuccess())
         .catch(() => Observable.of(this.actions.logoutFailed()))
     );
 
-  @Effect() logoutInvalidateSession = this.updates
-    .whenAction(AuthenticationActions.LOGOUT_SUCCESS)
+  /**
+   * Invalidates the session after a successful logout.
+   */
+  @Effect({dispatch: false}) logoutInvalidateSession = this.updates
+    .ofType(AuthenticationActions.LOGOUT_SUCCESS)
     .do(() => this.localStorage.removeItem('login.data'));
 }
