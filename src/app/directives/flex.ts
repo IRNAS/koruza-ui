@@ -10,6 +10,6 @@ export class FlexDirective{
 
   @HostBinding('style.flex')
   get style(){
-    return `${this.grow} ${this.shrink} ${this.flex === '' ? '0':this.flex}%`;
+    return `${this.grow} ${this.shrink} ${this.flex === '' ? '0' : this.flex}%`;
   }
 }

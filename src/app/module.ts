@@ -15,6 +15,7 @@ import {MdToolbarModule} from '@angular2-material/toolbar';
 import {MdCardModule} from '@angular2-material/card';
 import {MdInputModule} from '@angular2-material/input';
 import {MdProgressCircleModule} from '@angular2-material/progress-circle';
+import {MdSlideToggleModule} from '@angular2-material/slide-toggle';
 
 import {AppComponent} from './app';
 import {routes} from './routes';
@@ -49,6 +50,7 @@ import pages from './pages';
     MdCardModule,
     MdInputModule,
     MdProgressCircleModule,
+    MdSlideToggleModule,
   ],
   declarations: [
     directives,

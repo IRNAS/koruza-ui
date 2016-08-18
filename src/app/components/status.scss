@@ -1,0 +1,16 @@
+.status {
+  align-items: center;
+
+  span {
+    align-items: center;
+    padding-left: 10px;
+  }
+
+  &.ok {
+    color: green;
+  }
+
+  &.warning {
+    color: orange;
+  }
+}

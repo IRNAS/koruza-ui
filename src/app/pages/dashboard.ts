@@ -10,18 +10,19 @@ import {getCameraCalibration} from '../reducers/koruza';
   selector: 'dashboard-page',
   template: `
     <div layout="row">
-      <div flex>
-        Status report.
-      </div>
-
-      <webcam [calibration]="cameraCalibration | async" flex></webcam>
+      <koruza-status [status]="unitStatus | async"></koruza-status>
+      <koruza-webcam [calibration]="cameraCalibration | async" flex></koruza-webcam>
     </div>
-  `
+  `,
+  styleUrls: ['app/pages/dashboard.css'],
 })
 export class DashboardPageComponent {
   private cameraCalibration = this.store
     .let(getKoruzaState())
     .let(getCameraCalibration());
+
+  private unitStatus = this.store
+    .let(getKoruzaState());
 
   constructor(private store: Store<AppState>) {
   }

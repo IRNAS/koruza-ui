@@ -14,6 +14,7 @@ module.exports = function(defaults) {
       '@ngrx/**/*.+(js|js.map)',
       'lodash/**/*.+(js|js.map)',
       'lodash.**/**/*.+(js|js.map)',
+      'hammerjs/**/*.+(js|js.map)',
     ]
   });
 };

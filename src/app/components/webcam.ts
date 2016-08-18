@@ -18,7 +18,7 @@ export interface WebcamCalibration {
 }
 
 @Component({
-  selector: 'webcam',
+  selector: 'koruza-webcam',
   template: `
     <md-card class="camera-container">
       <img

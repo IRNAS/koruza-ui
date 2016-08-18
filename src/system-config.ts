@@ -10,6 +10,7 @@ const map: any = {
   '@angular2-material': 'vendor/@angular2-material',
   '@ngrx': 'vendor/@ngrx',
   'lodash': 'vendor/lodash',
+  'hammerjs': 'vendor/hammerjs',
 };
 
 /** User packages configuration. */
@@ -24,6 +25,7 @@ const packages: any = {
   '@angular2-material/toolbar': {main: 'toolbar.js'},
   '@angular2-material/input': {main: 'input.js'},
   '@angular2-material/progress-circle': {main: 'progress-circle.js'},
+  '@angular2-material/slide-toggle': {main: 'slide-toggle.js'},
 
   // NgRX.
   '@ngrx/core': {main: 'index.js', format: 'cjs'},
@@ -32,6 +34,9 @@ const packages: any = {
 
   // Lodash.
   'lodash': {main: 'index.js', defaultExtension: 'js'},
+
+  // HammerJS.
+  'hammerjs': {main: 'hammer.js', defaultExtension: 'js'},
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
