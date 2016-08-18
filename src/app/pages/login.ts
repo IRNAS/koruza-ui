@@ -60,7 +60,7 @@ import {AuthenticationActions} from '../actions';
       <div flex></div>
     </div>
   `,
-  styleUrls: ['app/pages/login.css'],
+  styleUrls: ['login.scss'],
 })
 export class LoginPageComponent {
   public username: string = '';

@@ -15,7 +15,7 @@ import {Component, Input} from '@angular/core';
       </div>
     </div>
   `,
-  styleUrls: ['app/components/status.css'],
+  styleUrls: ['status.scss'],
 })
 export class StatusComponent {
   // Unit status report.

@@ -2,10 +2,9 @@ import {Component} from '@angular/core';
 import 'hammerjs';
 
 @Component({
-  moduleId: module.id,
   selector: 'app-root',
   templateUrl: 'app.html',
-  styleUrls: ['app.css'],
+  styleUrls: ['app.scss'],
 })
 export class AppComponent {
 }

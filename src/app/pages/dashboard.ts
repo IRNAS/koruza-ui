@@ -14,7 +14,7 @@ import {getCameraCalibration} from '../reducers/koruza';
       <koruza-webcam [calibration]="cameraCalibration | async" flex></koruza-webcam>
     </div>
   `,
-  styleUrls: ['app/pages/dashboard.css'],
+  styleUrls: ['dashboard.scss'],
 })
 export class DashboardPageComponent {
   private cameraCalibration = this.store

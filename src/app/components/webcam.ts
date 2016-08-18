@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import {Component, Input, ViewChild, ElementRef} from '@angular/core';
 
-import {environment} from '../environment';
+import {environment} from '../environments/environment';
 
 const WEBCAM_WIDTH = 1280;
 const WEBCAM_HEIGHT = 720;
@@ -56,7 +56,7 @@ export interface WebcamCalibration {
       </div>
     </md-card>
   `,
-  styleUrls: ['app/components/webcam.css'],
+  styleUrls: ['webcam.scss'],
 })
 export class WebcamComponent {
   // Calibration data.
