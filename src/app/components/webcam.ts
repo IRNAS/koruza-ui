@@ -98,7 +98,10 @@ export class WebcamComponent {
     const ratioHeight = this.cameraImage.nativeElement.offsetHeight / WEBCAM_HEIGHT;
     this.centerWidth = ratioWidth * WEBCAM_CENTER_WIDTH;
     this.centerHeight = ratioHeight * WEBCAM_CENTER_HEIGHT;
-    this.centerOffsetLeft = ratioWidth * this.calibration.offsetX - this.centerWidth / 2;
-    this.centerOffsetTop = ratioHeight * this.calibration.offsetY - this.centerHeight / 2;
+
+    const offsetX = Math.min(WEBCAM_WIDTH, this.calibration.offsetX);
+    const offsetY = Math.min(WEBCAM_HEIGHT, this.calibration.offsetY);
+    this.centerOffsetLeft = Math.max(0, ratioWidth * offsetX - this.centerWidth / 2);
+    this.centerOffsetTop = Math.max(0, ratioHeight * offsetY - this.centerHeight / 2);
   }
 }
