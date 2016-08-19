@@ -25,13 +25,17 @@ export interface WebcamCalibration {
         #cameraImage
         class="camera"
         [src]="cameraUrl"
+        [style.visibility]="cameraImageLoaded ? 'visible' : 'hidden'"
         (load)="onCameraImageLoad()"
+        (error)="onCameraImageError()"
         (window:resize)="onResize(event)"
+        *ngIf="!cameraImageError"
       />
 
       <div *ngIf="!cameraImageLoaded" layout="row">
         <div flex></div>
-        <md-spinner></md-spinner>
+        <md-spinner *ngIf="!cameraImageError"></md-spinner>
+        <div *ngIf="cameraImageError">Camera image unavailable.</div>
         <div flex></div>
       </div>
 
@@ -65,6 +69,7 @@ export class WebcamComponent {
   @ViewChild('cameraImage') private cameraImage: ElementRef;
 
   private cameraImageLoaded: boolean = false;
+  private cameraImageError: boolean = false;
 
   private centerWidth: number = 0;
   private centerHeight: number = 0;
@@ -90,6 +95,11 @@ export class WebcamComponent {
   private onCameraImageLoad(): void {
     this.cameraImageLoaded = true;
     this.recomputeCenterGeometry();
+  }
+
+  private onCameraImageError(): void {
+    this.cameraImageLoaded = false;
+    this.cameraImageError = true;
   }
 
   private recomputeCenterGeometry(): void {
