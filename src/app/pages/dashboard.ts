@@ -40,8 +40,8 @@ export class DashboardPageComponent {
   private onWebcamClick(coordinates: WebcamCoordinates): void {
     // Request the motors to move based on coordinates.
     this.store.let(getKoruzaState()).take(1).subscribe((state) => {
-      let deltaX = Math.round(((coordinates.x - state.cameraCalibration.offsetX) / coordinates.maxX) * 20) * 10;
-      let deltaY = Math.round(((coordinates.y - state.cameraCalibration.offsetY) / coordinates.maxY) * 20) * 10;
+      let deltaX = Math.round(((coordinates.x - state.cameraCalibration.offsetX) / coordinates.maxX) * 20) * 100;
+      let deltaY = Math.round(((coordinates.y - state.cameraCalibration.offsetY) / coordinates.maxY) * 20) * 100;
 
       this.store.dispatch(this.koruzaActions.moveMotors(state.motors.x + deltaX, state.motors.y + deltaY));
     });
