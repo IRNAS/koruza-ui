@@ -77,12 +77,16 @@ export class UbusService {
       params: [sessionId, object, method, parameters]
     }).map((response) => {
       const body = response.json();
-      const resultCode: UbusStatus = body.result[0];
+      if (body.result) {
+        const resultCode: UbusStatus = body.result[0];
 
-      if (resultCode === UbusStatus.OK) {
-        return body.result[1];
-      } else {
-        throw new UbusError(resultCode);
+        if (resultCode === UbusStatus.OK) {
+          return body.result[1];
+        } else {
+          throw new UbusError(resultCode);
+        }
+      } else if (body.error) {
+        throw new UbusError(body.error.code);
       }
     });
   }

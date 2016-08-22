@@ -24,4 +24,12 @@ export class KoruzaActions {
       type: KoruzaActions.UPDATE_FAILED
     }
   }
+
+  static MOVE_MOTORS = 'koruza.move_motors';
+  public moveMotors(x: number, y: number): Action {
+    return {
+      type: KoruzaActions.MOVE_MOTORS,
+      payload: {x, y}
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {Component, Input, ViewChild, ElementRef} from '@angular/core';
+import {Component, Input, Output, ViewChild, ElementRef, EventEmitter} from '@angular/core';
 
 import {environment} from '../environments/environment';
 
@@ -17,6 +17,13 @@ export interface WebcamCalibration {
   offsetY: number;
 }
 
+export interface WebcamCoordinates {
+  x: number;
+  y: number;
+  maxX: number;
+  maxY: number;
+}
+
 @Component({
   selector: 'koruza-webcam',
   template: `
@@ -28,7 +35,8 @@ export interface WebcamCalibration {
         [style.visibility]="cameraImageLoaded ? 'visible' : 'hidden'"
         (load)="onCameraImageLoad()"
         (error)="onCameraImageError()"
-        (window:resize)="onResize(event)"
+        (click)="onCameraImageClick($event)"
+        (window:resize)="onResize($event)"
         *ngIf="!cameraImageError"
       />
 
@@ -65,6 +73,8 @@ export interface WebcamCalibration {
 export class WebcamComponent {
   // Calibration data.
   @Input() private calibration: WebcamCalibration;
+  // Click event.
+  @Output() private cameraClick: EventEmitter<WebcamCoordinates> = new EventEmitter<WebcamCoordinates>();
 
   @ViewChild('cameraImage') private cameraImage: ElementRef;
 
@@ -100,6 +110,19 @@ export class WebcamComponent {
   private onCameraImageError(): void {
     this.cameraImageLoaded = false;
     this.cameraImageError = true;
+  }
+
+  private onCameraImageClick(event: MouseEvent): void {
+    const ratioWidth = this.cameraImage.nativeElement.offsetWidth / WEBCAM_WIDTH;
+    const ratioHeight = this.cameraImage.nativeElement.offsetHeight / WEBCAM_HEIGHT;
+
+    // Emit translated coordinates.
+    this.cameraClick.emit({
+      x: event.clientX / ratioWidth,
+      y: event.clientY / ratioHeight,
+      maxX: WEBCAM_WIDTH,
+      maxY: WEBCAM_HEIGHT
+    });
   }
 
   private recomputeCenterGeometry(): void {

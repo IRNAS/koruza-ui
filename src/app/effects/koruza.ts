@@ -26,8 +26,23 @@ export class KoruzaEffects {
    */
   @Effect() refreshState = this.updates
     .ofType(KoruzaActions.UPDATE)
-    .switchMap(update =>
+    .switchMap(action =>
       this.ubus.call('koruza.get_status')
         .map(response => this.actions.updateComplete(response))
         .catch(() => Observable.of(this.actions.updateFailed())));
+
+  /**
+   * Handle motor move command.
+   */
+  @Effect() moveMotors = this.updates
+    .ofType(KoruzaActions.MOVE_MOTORS)
+    .switchMap(action =>
+      this.ubus.call('koruza.move_motor', {
+        x: action.payload.x,
+        y: action.payload.y,
+        z: 0
+      })
+        .map(() => this.actions.update())
+        .catch(() => Observable.of(this.actions.update()))
+    );
 }
