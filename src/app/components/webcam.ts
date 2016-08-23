@@ -20,8 +20,6 @@ export interface WebcamCalibration {
 export interface WebcamCoordinates {
   x: number;
   y: number;
-  maxX: number;
-  maxY: number;
 }
 
 @Component({
@@ -145,24 +143,23 @@ export class WebcamComponent {
     const ratioWidth = this.cameraImage.nativeElement.offsetWidth / WEBCAM_WIDTH;
     const ratioHeight = this.cameraImage.nativeElement.offsetHeight / WEBCAM_HEIGHT;
 
-    const x = event.clientX - boundingBox.left;
-    const y = event.clientY - boundingBox.top;
+    const x = (event.clientX - boundingBox.left) / ratioWidth;
+    const y = WEBCAM_HEIGHT - (event.clientY - boundingBox.top) / ratioHeight;
+
+    let deltaX = Math.round(((x - this.calibration.offsetX) / WEBCAM_WIDTH) * 20) * 100;
+    let deltaY = Math.round(((y - this.calibration.offsetY) / WEBCAM_HEIGHT) * 20) * 100;
 
     // Emit translated coordinates.
     this.cameraClick.emit({
-      x: x / ratioWidth,
-      y: WEBCAM_HEIGHT - y / ratioHeight,
-      maxX: WEBCAM_WIDTH,
-      maxY: WEBCAM_HEIGHT
+      x: deltaX,
+      y: deltaY,
     });
   }
 
   private onMoveClick(where): void {
     this.cameraClick.emit({
-      x: WEBCAM_WIDTH * (where.x || 0) / 2,
-      y: WEBCAM_WIDTH * (where.y || 0) / 2,
-      maxX: WEBCAM_WIDTH,
-      maxY: WEBCAM_HEIGHT
+      x: 1000 * (where.x || 0),
+      y: 1000 * (where.y || 0)
     });
   }
 
