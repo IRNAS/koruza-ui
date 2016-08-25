@@ -27,6 +27,7 @@ import directives from './directives';
 import components from './components';
 import guards from './guards';
 import pages from './pages';
+import pipes from './pipes';
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import pages from './pages';
     MdSlideToggleModule,
   ],
   declarations: [
+    pipes,
     directives,
     components,
     pages,

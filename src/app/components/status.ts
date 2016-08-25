@@ -19,8 +19,10 @@ import {SfpState} from '../reducers/koruza';
       </div>
 
       <div *ngIf="status.connected" flex layout="column">
-        <span>Motor X: {{status.motors.x}}</span>
-        <span>Motor Y: {{status.motors.y}}</span>
+        <span class="datum-name">Motor X</span>
+        <span>{{status.motors.x}}</span>
+        <span class="datum-name">Motor Y</span>
+        <span>{{status.motors.y}}</span>
       </div>
 
       <!-- SFP -->
@@ -35,8 +37,10 @@ import {SfpState} from '../reducers/koruza';
       </div>
 
       <div *ngIf="sfpConnected" flex layout="column">
-        <span>RX Power: {{sfp.diagnostics.rxPower}}</span>
-        <span>TX Power: {{sfp.diagnostics.txPower}}</span>
+        <span class="datum-name">RX Power</span>
+        <span>{{sfp.diagnostics.rxPower}} ({{sfp.diagnostics.rxPower | dbm}} dBm)</span>
+        <span class="datum-name">TX Power</span>
+        <span>{{sfp.diagnostics.txPower}} ({{sfp.diagnostics.txPower | dbm}} dBm)</span>
       </div>
     </div>
   `,
