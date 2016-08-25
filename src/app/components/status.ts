@@ -37,6 +37,10 @@ import {SfpState} from '../reducers/koruza';
       </div>
 
       <div *ngIf="sfpConnected" flex layout="column">
+        <span class="datum-name">Serial Number</span>
+        <span>{{sfp.serialNumber}}</span>
+        <span class="datum-name">TX Wavelength</span>
+        <span>{{sfp.wavelength}} nm</span>
         <span class="datum-name">RX Power</span>
         <span>{{sfp.diagnostics.rxPower}} ({{sfp.diagnostics.rxPower | dbm}} dBm)</span>
         <span class="datum-name">TX Power</span>
