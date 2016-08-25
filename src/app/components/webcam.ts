@@ -28,13 +28,13 @@ export interface WebcamCoordinates {
     <md-card class="camera-container">
       <div layout="column" alignItems="center">
         <div>
-          <button md-icon-button (click)="onMoveClick({y: 1})" [disabled]="!cameraImageLoaded">
+          <button md-icon-button (click)="onMoveClick({y: 1})" [disabled]="!cameraImageLoaded" [disableRipple]="true">
               <md-icon>keyboard_arrow_up</md-icon>
           </button>
         </div>
         <div flex layout="row" alignItems="center">
           <div>
-            <button md-icon-button (click)="onMoveClick({x: -1})" [disabled]="!cameraImageLoaded">
+            <button md-icon-button (click)="onMoveClick({x: -1})" [disabled]="!cameraImageLoaded" [disableRipple]="true">
               <md-icon>keyboard_arrow_left</md-icon>
             </button>
           </div>
@@ -77,13 +77,13 @@ export interface WebcamCoordinates {
             </div>
           </div>
           <div>
-            <button md-icon-button (click)="onMoveClick({x: 1})" [disabled]="!cameraImageLoaded">
+            <button md-icon-button (click)="onMoveClick({x: 1})" [disabled]="!cameraImageLoaded" [disableRipple]="true">
               <md-icon>keyboard_arrow_right</md-icon>
             </button>
           </div>
         </div>
         <div>
-          <button md-icon-button (click)="onMoveClick({y: -1})" [disabled]="!cameraImageLoaded">
+          <button md-icon-button (click)="onMoveClick({y: -1})" [disabled]="!cameraImageLoaded" [disableRipple]="true">
             <md-icon>keyboard_arrow_down</md-icon>
           </button>
         </div>
