@@ -36,6 +36,8 @@ export interface KoruzaState {
   };
   sfps: SfpStateMap;
   cameraCalibration: {
+    width: number;
+    height: number;
     offsetX: number;
     offsetY: number;
   };
@@ -52,6 +54,8 @@ const initialState: KoruzaState = {
   },
   sfps: {},
   cameraCalibration: {
+    width: 1280,
+    height: 720,
     offsetX: 0,
     offsetY: 0
   },
@@ -78,6 +82,8 @@ export function reducer(state = initialState, action: Action): KoruzaState {
         },
         sfps: status.sfps,
         cameraCalibration: {
+          width: status.camera_calibration.width || 1280,
+          height: status.camera_calibration.height || 720,
           offsetX: status.camera_calibration.offset_x,
           offsetY: status.camera_calibration.offset_y
         },

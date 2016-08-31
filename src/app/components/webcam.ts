@@ -3,9 +3,6 @@ import {Component, Input, Output, ViewChild, ElementRef, EventEmitter} from '@an
 
 import {environment} from '../environments/environment';
 
-const WEBCAM_WIDTH = 1280;
-const WEBCAM_HEIGHT = 720;
-
 const WEBCAM_CENTER_WIDTH = 40;
 const WEBCAM_CENTER_HEIGHT = 40;
 
@@ -13,6 +10,8 @@ const WEBCAM_CENTER_HEIGHT = 40;
  * Webcam calibration data.
  */
 export interface WebcamCalibration {
+  width: number;
+  height: number;
   offsetX: number;
   offsetY: number;
 }
@@ -140,14 +139,14 @@ export class WebcamComponent {
 
   private onCameraImageClick(event: MouseEvent): void {
     const boundingBox = this.cameraImage.nativeElement.getBoundingClientRect();
-    const ratioWidth = this.cameraImage.nativeElement.offsetWidth / WEBCAM_WIDTH;
-    const ratioHeight = this.cameraImage.nativeElement.offsetHeight / WEBCAM_HEIGHT;
+    const ratioWidth = this.cameraImage.nativeElement.offsetWidth / this.calibration.width;
+    const ratioHeight = this.cameraImage.nativeElement.offsetHeight / this.calibration.height;
 
     const x = (event.clientX - boundingBox.left) / ratioWidth;
-    const y = WEBCAM_HEIGHT - (event.clientY - boundingBox.top) / ratioHeight;
+    const y = this.calibration.height - (event.clientY - boundingBox.top) / ratioHeight;
 
-    let deltaX = Math.round(((x - this.calibration.offsetX) / WEBCAM_WIDTH) * 20) * 100;
-    let deltaY = Math.round(((y - this.calibration.offsetY) / WEBCAM_HEIGHT) * 20) * 100;
+    let deltaX = Math.round(((x - this.calibration.offsetX) / this.calibration.width) * 20) * 100;
+    let deltaY = Math.round(((y - this.calibration.offsetY) / this.calibration.height) * 20) * 100;
 
     // Emit translated coordinates.
     this.cameraClick.emit({
@@ -170,13 +169,13 @@ export class WebcamComponent {
     this.baseOffsetTop = this.cameraImage.nativeElement.offsetTop;
 
     // Compute offset based on the actual image size and calibrated offset.
-    const ratioWidth = this.baseWidth / WEBCAM_WIDTH;
-    const ratioHeight = this.baseHeight / WEBCAM_HEIGHT;
+    const ratioWidth = this.baseWidth / this.calibration.width;
+    const ratioHeight = this.baseHeight / this.calibration.height;
     this.centerWidth = ratioWidth * WEBCAM_CENTER_WIDTH;
     this.centerHeight = ratioHeight * WEBCAM_CENTER_HEIGHT;
 
-    const offsetX = Math.min(WEBCAM_WIDTH, this.calibration.offsetX);
-    const offsetY = Math.min(WEBCAM_HEIGHT, this.calibration.offsetY);
+    const offsetX = Math.min(this.calibration.width, this.calibration.offsetX);
+    const offsetY = Math.min(this.calibration.height, this.calibration.offsetY);
     this.centerOffsetLeft = this.baseOffsetLeft + Math.max(0, ratioWidth * offsetX - this.centerWidth / 2);
     this.centerOffsetTop = this.baseOffsetTop + Math.max(0, ratioHeight * offsetY - this.centerHeight / 2);
   }
