@@ -1,10 +1,10 @@
-import {RouterConfig, provideRouter}  from '@angular/router';
+import {Routes}  from '@angular/router';
 
 import {AuthenticationGuard} from './guards/authentication';
 import {LoginPageComponent} from './pages/login';
 import {DashboardPageComponent} from './pages/dashboard';
 
-export const routes: RouterConfig = [
+export const routes: Routes = [
   // Default route.
   {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
 

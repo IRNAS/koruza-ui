@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import {Component, Input, Output, ViewChild, ElementRef, EventEmitter} from '@angular/core';
 
-import {environment} from '../environments/environment';
+import {environment} from '../../environments/environment';
 
 const WEBCAM_CENTER_WIDTH = 40;
 const WEBCAM_CENTER_HEIGHT = 40;
