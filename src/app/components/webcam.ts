@@ -7,7 +7,7 @@ import {CameraCalibrationState, MotorState} from '../reducers/koruza';
 const WEBCAM_CENTER_WIDTH = 40;
 const WEBCAM_CENTER_HEIGHT = 40;
 
-const PX_PER_MM = 1050;
+const PX_PER_MM = 9000;
 
 const STEPS_PER_ROTATION = 4096;
 const ROTATION_DISTANCE = 0.8;
@@ -74,7 +74,7 @@ interface Coordinate {
               [style.height.px]="centerBox.height"
               [style.left.px]="centerBox.left"
               [style.top.px]="centerBox.top"
-              *ngIf="cameraImageLoaded"
+              *ngIf="cameraImageLoaded && centerBox.visible"
             >
               <md-icon
                 class="camera-cross"
@@ -182,8 +182,8 @@ export class WebcamComponent {
   private mapWebcamToBrowser({x, y}: Coordinate): Coordinate {
     const ratio = this.ratioBrowserToWebcam();
 
-    x = Math.max(0, ratio.x * x);
-    y = Math.max(0, ratio.y * y);
+    x = Math.min(this.baseWidth, Math.max(0, ratio.x * x));
+    y = Math.min(this.baseHeight, Math.max(0, ratio.y * y));
 
     return {x, y};
   }
@@ -207,7 +207,7 @@ export class WebcamComponent {
    */
   private mapReferenceToWebcam({x, y}: Coordinate): Coordinate {
     x = x * PX_PER_MM / this.calibration.distance;
-    y = y * PX_PER_MM / this.calibration.distance;
+    y = -y * PX_PER_MM / this.calibration.distance;
 
     // Reference position (0, 0) is in the calibration center.
     x += this.calibration.offsetX;
@@ -226,7 +226,7 @@ export class WebcamComponent {
     y -= this.calibration.offsetY;
 
     x = x * this.calibration.distance / PX_PER_MM;
-    y = y * this.calibration.distance / PX_PER_MM;
+    y = -y * this.calibration.distance / PX_PER_MM;
 
     return {x, y};
   }
@@ -290,6 +290,20 @@ export class WebcamComponent {
       bbPath.push(`${command}${mapped.x} ${mapped.y}`);
     }
     bbPath.push('Z');
+
+    // Draw center and measuring lines of 120mm.
+    const center = [
+      {c: 'M', x: 0, y: 0},
+      {c: 'L', x: 120, y: 0},
+      {c: 'M', x: 0, y: 0},
+      {c: 'L', x: 0, y: 120}
+    ];
+
+    for (const corner of center) {
+      const mapped = this.mapWebcamToBrowser(this.mapReferenceToWebcam(corner));
+      bbPath.push(`${corner.c}${mapped.x} ${mapped.y}`);
+    }
+
     return bbPath.join(' ');
   }
 
@@ -297,13 +311,11 @@ export class WebcamComponent {
     // Compute the size of the center overlay.
     const centerSize = this.mapWebcamToBrowser({x: WEBCAM_CENTER_WIDTH, y: WEBCAM_CENTER_HEIGHT});
     // Compute the current position of the center overlay.
-    const centerPosition = this.mapWebcamToBrowser(
-      this.mapReferenceToWebcam(
-        this.mapMotorToReference(this.motors)
-      )
-    );
+    const centerWebcam = this.mapReferenceToWebcam(this.mapMotorToReference(this.motors));
+    const centerPosition = this.mapWebcamToBrowser(centerWebcam);
 
     return {
+      visible: centerWebcam.x > 0 && centerWebcam.y > 0,
       left: this.baseOffsetLeft + Math.max(0, centerPosition.x - centerSize.x / 2),
       top: this.baseOffsetTop + Math.max(0, centerPosition.y - centerSize.y / 2),
       width: centerSize.x,
