@@ -206,12 +206,20 @@ export class WebcamComponent {
    * coordinate system.
    */
   private mapReferenceToWebcam({x, y}: Coordinate): Coordinate {
-    x = x * PX_PER_MM / this.calibration.distance;
-    y = -y * PX_PER_MM / this.calibration.distance;
+    const transform = ({x, y}: Coordinate) => {
+      return {
+        x: x * PX_PER_MM / this.calibration.distance,
+        y: -y * PX_PER_MM / this.calibration.distance
+      };
+    };
 
-    // Reference position (0, 0) is in the calibration center.
-    x += this.calibration.offsetX;
-    y += this.calibration.offsetY;
+    // Reference position (0, 0) should be in the calibration center when motors are at (0, 0).
+    const motorOrigin = transform(this.mapMotorToReference({x: 0, y: 0}));
+    const motorCurrent = transform(this.mapMotorToReference(this.motors));
+    ({x, y} = transform({x, y}));
+
+    x = x + this.calibration.offsetX - (motorCurrent.x - motorOrigin.x);
+    y = y + this.calibration.offsetY - (motorCurrent.y - motorOrigin.y);
 
     return {x, y};
   }
@@ -221,9 +229,19 @@ export class WebcamComponent {
    * coordinate system.
    */
   private mapWebcamToReference({x, y}: Coordinate): Coordinate {
-    // Reference position (0, 0) is in the calibration center.
-    x -= this.calibration.offsetX;
-    y -= this.calibration.offsetY;
+    const transform = ({x, y}: Coordinate) => {
+      return {
+        x: x * PX_PER_MM / this.calibration.distance,
+        y: -y * PX_PER_MM / this.calibration.distance
+      };
+    };
+
+    // Reference position (0, 0) should be in the calibration center when motors are at (0, 0).
+    const motorOrigin = transform(this.mapMotorToReference({x: 0, y: 0}));
+    const motorCurrent = transform(this.mapMotorToReference(this.motors));
+
+    x = x - this.calibration.offsetX + (motorCurrent.x - motorOrigin.x);
+    y = y - this.calibration.offsetY + (motorCurrent.y - motorOrigin.y);
 
     x = x * this.calibration.distance / PX_PER_MM;
     y = -y * this.calibration.distance / PX_PER_MM;
@@ -311,7 +329,7 @@ export class WebcamComponent {
     // Compute the size of the center overlay.
     const centerSize = this.mapWebcamToBrowser({x: WEBCAM_CENTER_WIDTH, y: WEBCAM_CENTER_HEIGHT});
     // Compute the current position of the center overlay.
-    const centerWebcam = this.mapReferenceToWebcam(this.mapMotorToReference(this.motors));
+    const centerWebcam = {x: this.calibration.offsetX, y: this.calibration.offsetY};
     const centerPosition = this.mapWebcamToBrowser(centerWebcam);
 
     return {
