@@ -254,8 +254,8 @@ export class WebcamComponent {
    */
   private getMotorRange(): Coordinate {
     return {
-      x: 0.5 * this.calibration.distance * Math.sin(ANGLE_PER_STEP * this.motors.rangeX),
-      y: 0.5 * this.calibration.distance * Math.sin(ANGLE_PER_STEP * this.motors.rangeY)
+      x: 0.5 * this.calibration.distance * Math.sin(ANGLE_PER_STEP * this.motors.rangeX * 2),
+      y: 0.5 * this.calibration.distance * Math.sin(ANGLE_PER_STEP * this.motors.rangeY * 2)
     };
   }
 
@@ -266,10 +266,13 @@ export class WebcamComponent {
   private mapMotorToReference({x, y}: Coordinate): Coordinate {
     const range = this.getMotorRange();
 
-    x = Math.cos(ROTATION_ANGLE) * (this.calibration.distance * Math.sin(ANGLE_PER_STEP * x) - range.x) -
-        Math.sin(ROTATION_ANGLE) * (this.calibration.distance * Math.sin(ANGLE_PER_STEP * y) - range.x);
+    x += this.motors.rangeX;
+    y += this.motors.rangeY;
 
-    y = Math.sin(ROTATION_ANGLE) * (this.calibration.distance * Math.sin(ANGLE_PER_STEP * x) - range.y) +
+    x = Math.cos(ROTATION_ANGLE) * (this.calibration.distance * Math.sin(ANGLE_PER_STEP * x) - range.x) -
+        Math.sin(ROTATION_ANGLE) * (this.calibration.distance * Math.sin(ANGLE_PER_STEP * y) - range.y);
+
+    y = Math.sin(ROTATION_ANGLE) * (this.calibration.distance * Math.sin(ANGLE_PER_STEP * x) - range.x) +
         Math.cos(ROTATION_ANGLE) * (this.calibration.distance * Math.sin(ANGLE_PER_STEP * y) - range.y);
 
     return {x, y};
@@ -284,6 +287,9 @@ export class WebcamComponent {
 
     x = (1.0 / ANGLE_PER_STEP) * Math.asin((x * Math.cos(ROTATION_ANGLE) + y * Math.sin(ROTATION_ANGLE) + range.x) / this.calibration.distance);
     y = (1.0 / ANGLE_PER_STEP) * Math.asin((-x * Math.sin(ROTATION_ANGLE) + y * Math.cos(ROTATION_ANGLE) + range.x) / this.calibration.distance);
+
+    x -= this.motors.rangeX;
+    y -= this.motors.rangeY;
 
     x = Math.round(Math.max(-this.motors.rangeX, Math.min(this.motors.rangeX, x)));
     y = Math.round(Math.max(-this.motors.rangeY, Math.min(this.motors.rangeX, y)));

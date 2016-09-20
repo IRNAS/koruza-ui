@@ -56,8 +56,8 @@ const initialState: KoruzaState = {
   motors: {
     x: 0,
     y: 0,
-    rangeX: 50000,
-    rangeY: 50000
+    rangeX: 25000,
+    rangeY: 25000
   },
   sfps: {},
   cameraCalibration: {
@@ -86,8 +86,8 @@ export function reducer(state = initialState, action: Action): KoruzaState {
         motors: {
           x: status.motors.x,
           y: status.motors.y,
-          rangeX: status.motors.range_x || 50000,
-          rangeY: status.motors.range_y || 50000
+          rangeX: status.motors.range_x || 25000,
+          rangeY: status.motors.range_y || 25000
         },
         sfps: status.sfps,
         cameraCalibration: {
