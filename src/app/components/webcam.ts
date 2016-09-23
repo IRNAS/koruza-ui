@@ -7,7 +7,8 @@ import {CameraCalibrationState, MotorState} from '../reducers/koruza';
 const WEBCAM_CENTER_WIDTH = 40;
 const WEBCAM_CENTER_HEIGHT = 40;
 
-const PX_PER_MM = 9000;
+const PX_PER_MM = 18225;
+const PX_PER_MM_AT_WEBCAM = {x: 2592, y: 1944};
 
 const STEPS_PER_ROTATION = 4096;
 const ROTATION_DISTANCE = 0.8;
@@ -202,14 +203,29 @@ export class WebcamComponent {
   }
 
   /**
+   * Returns the number of pixels per millimeter when converting from the
+   * reference coordinate system to the webcam coordinate system. This value
+   * depends on the camera resolution.
+   */
+  private getPixelsPerMm(): number {
+    const ratio = {
+      x: this.calibration.width / PX_PER_MM_AT_WEBCAM.x,
+      y: this.calibration.height / PX_PER_MM_AT_WEBCAM.y
+    };
+
+    return ((ratio.x + ratio.y) / 2) * PX_PER_MM;
+  }
+
+  /**
    * Maps coordinates in reference coordinate system to coordinates in webcam
    * coordinate system.
    */
   private mapReferenceToWebcam({x, y}: Coordinate): Coordinate {
+    const pixelsPerMm = this.getPixelsPerMm();
     const transform = ({x, y}: Coordinate) => {
       return {
-        x: x * PX_PER_MM / this.calibration.distance,
-        y: -y * PX_PER_MM / this.calibration.distance
+        x: x * pixelsPerMm / this.calibration.distance,
+        y: -y * pixelsPerMm / this.calibration.distance
       };
     };
 
@@ -229,10 +245,11 @@ export class WebcamComponent {
    * coordinate system.
    */
   private mapWebcamToReference({x, y}: Coordinate): Coordinate {
+    const pixelsPerMm = this.getPixelsPerMm();
     const transform = ({x, y}: Coordinate) => {
       return {
-        x: x * PX_PER_MM / this.calibration.distance,
-        y: -y * PX_PER_MM / this.calibration.distance
+        x: x * pixelsPerMm / this.calibration.distance,
+        y: -y * pixelsPerMm / this.calibration.distance
       };
     };
 
@@ -243,8 +260,8 @@ export class WebcamComponent {
     x = x - this.calibration.offsetX + (motorCurrent.x - motorOrigin.x);
     y = y - this.calibration.offsetY + (motorCurrent.y - motorOrigin.y);
 
-    x = x * this.calibration.distance / PX_PER_MM;
-    y = -y * this.calibration.distance / PX_PER_MM;
+    x = x * this.calibration.distance / pixelsPerMm;
+    y = -y * this.calibration.distance / pixelsPerMm;
 
     return {x, y};
   }
