@@ -42,8 +42,13 @@ export interface CameraCalibrationState {
   distance: number;
 }
 
+export interface ErrorState {
+  code: number;
+}
+
 export interface KoruzaState {
   connected: boolean;
+  errors: ErrorState;
   motors: MotorState;
   sfps: SfpStateMap;
   cameraCalibration: CameraCalibrationState;
@@ -53,6 +58,9 @@ export interface KoruzaState {
 
 const initialState: KoruzaState = {
   connected: false,
+  errors: {
+    code: 0,
+  },
   motors: {
     x: 0,
     y: 0,
@@ -83,6 +91,9 @@ export function reducer(state = initialState, action: Action): KoruzaState {
 
       return Object.assign({}, state, {
         connected: status.connected,
+        errors: {
+          code: status.errors.code,
+        },
         motors: {
           x: status.motors.x,
           y: status.motors.y,

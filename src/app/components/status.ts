@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import {Component, Input} from '@angular/core';
 
-import {SfpState} from '../reducers/koruza';
+import {KoruzaState, SfpState} from '../reducers/koruza';
 
 @Component({
   selector: 'koruza-status',
@@ -23,6 +23,11 @@ import {SfpState} from '../reducers/koruza';
         <span>{{status.motors.x}}</span>
         <span class="datum-name">Motor Y</span>
         <span>{{status.motors.y}}</span>
+      </div>
+
+      <div *ngIf="hasErrors" class="status warning" flex layout="row">
+        <md-icon>warning</md-icon>
+        <span>MCU Error {{status.errors.code}}</span>
       </div>
 
       <!-- SFP -->
@@ -52,7 +57,11 @@ import {SfpState} from '../reducers/koruza';
 })
 export class StatusComponent {
   // Unit status report.
-  @Input() private status: any;
+  @Input() private status: KoruzaState;
+
+  private get hasErrors(): boolean {
+    return _.isNumber(this.status.errors.code) && this.status.errors.code > 0;
+  }
 
   private get sfpConnected(): boolean {
     return !_.isEmpty(this.status.sfps);
