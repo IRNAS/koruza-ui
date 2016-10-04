@@ -27,6 +27,12 @@ interface Coordinate {
   y: number;
 }
 
+enum MouseMode {
+  NONE = 0,
+  MOVE,
+  SET_CALIBRATION
+}
+
 @Component({
   selector: 'koruza-webcam',
   template: `
@@ -36,6 +42,11 @@ interface Coordinate {
           <button md-icon-button (click)="onMoveClick({y: 1})" [disabled]="!cameraImageLoaded" [disableRipple]="true">
               <md-icon>keyboard_arrow_up</md-icon>
           </button>
+          <md-button-toggle-group name="alignment" [(ngModel)]="mouseMode">
+            <md-button-toggle [value]="0">None</md-button-toggle>
+            <md-button-toggle [value]="1">Movement</md-button-toggle>
+            <md-button-toggle [value]="2">Calibration</md-button-toggle>
+          </md-button-toggle-group>
         </div>
         <div flex layout="row" alignItems="center">
           <div>
@@ -121,6 +132,8 @@ export class WebcamComponent {
   @Input() private motors: MotorState;
   // Click event.
   @Output() private cameraClick: EventEmitter<WebcamCoordinates> = new EventEmitter<WebcamCoordinates>();
+  // Calibration set event.
+  @Output() private calibrationSet: EventEmitter<WebcamCoordinates> = new EventEmitter<WebcamCoordinates>();
 
   @ViewChild('cameraImage') private cameraImage: ElementRef;
 
@@ -132,6 +145,7 @@ export class WebcamComponent {
   private baseOffsetLeft: number = 0;
   private baseOffsetTop: number = 0;
 
+  private mouseMode: MouseMode = MouseMode.NONE;
   private mouseOverlay: boolean = false;
   private mouse: Coordinate = {x: 0, y: 0};
   private mouseWebcam: Coordinate = {x: 0, y: 0};
@@ -186,7 +200,25 @@ export class WebcamComponent {
     let y = event.clientY - boundingBox.top;
 
     // Inverse transformation to motor coordinates.
-    this.cameraClick.emit(this.mapReferenceToMotor(this.mapWebcamToReference(this.mapBrowserToWebcam({x, y}))));
+    const webcam = this.mapBrowserToWebcam({x, y});
+    const reference = this.mapWebcamToReference(webcam);
+    const motor = this.mapReferenceToMotor(reference);
+
+    switch (this.mouseMode) {
+      case MouseMode.MOVE: {
+        this.cameraClick.emit(motor);
+        break;
+      }
+
+      case MouseMode.SET_CALIBRATION: {
+        this.calibrationSet.emit(webcam);
+        this.mouseMode = MouseMode.NONE;
+        break;
+      }
+
+      default: break;
+    }
+
   }
 
   private onMoveClick(where): void {

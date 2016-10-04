@@ -32,4 +32,12 @@ export class KoruzaActions {
       payload: {x, y}
     }
   }
+
+  static SET_CALIBRATION = 'koruza.set_calibration';
+  public setCalibration(x: number, y: number): Action {
+    return {
+      type: KoruzaActions.SET_CALIBRATION,
+      payload: {x, y}
+    }
+  }
 }

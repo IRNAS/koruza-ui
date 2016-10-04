@@ -19,6 +19,7 @@ import {WebcamCoordinates} from '../components/webcam';
         [calibration]="cameraCalibration | async"
         [motors]="motors | async"
         (cameraClick)="onWebcamClick($event)"
+        (calibrationSet)="onWebcamCalibrationSet($event)"
         flex
       >
       </koruza-webcam>
@@ -45,5 +46,13 @@ export class DashboardPageComponent {
   private onWebcamClick(coordinates: WebcamCoordinates): void {
     // Request the motors to move based on coordinates.
     this.store.dispatch(this.koruzaActions.moveMotors(coordinates.x, coordinates.y));
+  }
+
+  private onWebcamCalibrationSet(coordinates: WebcamCoordinates): void {
+    // Request the driver to configure webcam calibration.
+    this.store.dispatch(this.koruzaActions.setCalibration(
+      Math.round(coordinates.x),
+      Math.round(coordinates.y))
+    );
   }
 }

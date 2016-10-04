@@ -77,4 +77,18 @@ export class KoruzaEffects {
         .map(() => this.actions.update())
         .catch(() => Observable.of(this.actions.update()))
     );
+
+  /**
+   * Handle calibration configuration command.
+   */
+  @Effect() calibrationSet = this.updates
+    .ofType(KoruzaActions.SET_CALIBRATION)
+    .switchMap(action =>
+      this.ubus.call('koruza.set_webcam_calibration', {
+        x: action.payload.x,
+        y: action.payload.y,
+      })
+        .map(() => this.actions.update())
+        .catch(() => Observable.of(this.actions.update()))
+    );
 }

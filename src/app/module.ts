@@ -11,6 +11,7 @@ import {MdSidenavModule} from '@angular2-material/sidenav';
 import {MdListModule} from '@angular2-material/list';
 import {MdIconModule} from '@angular2-material/icon';
 import {MdButtonModule} from '@angular2-material/button';
+import {MdButtonToggleModule} from '@angular2-material/button-toggle';
 import {MdToolbarModule} from '@angular2-material/toolbar';
 import {MdCardModule} from '@angular2-material/card';
 import {MdInputModule} from '@angular2-material/input';
@@ -47,6 +48,7 @@ import pipes from './pipes';
     MdListModule.forRoot(),
     MdIconModule.forRoot(),
     MdButtonModule.forRoot(),
+    MdButtonToggleModule.forRoot(),
     MdToolbarModule.forRoot(),
     MdCardModule.forRoot(),
     MdInputModule.forRoot(),
