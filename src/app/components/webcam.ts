@@ -42,10 +42,18 @@ enum MouseMode {
           <button md-icon-button (click)="onMoveClick({y: 1})" [disabled]="!cameraImageLoaded" [disableRipple]="true">
               <md-icon>keyboard_arrow_up</md-icon>
           </button>
+          <span>Mode:</span>
           <md-button-toggle-group name="alignment" [(ngModel)]="mouseMode">
             <md-button-toggle [value]="0">None</md-button-toggle>
             <md-button-toggle [value]="1">Movement</md-button-toggle>
             <md-button-toggle [value]="2">Calibration</md-button-toggle>
+          </md-button-toggle-group>
+          <span>Steps:</span>
+          <md-button-toggle-group name="steps" [(ngModel)]="arrowSteps">
+            <md-button-toggle [value]="1">1</md-button-toggle>
+            <md-button-toggle [value]="10">10</md-button-toggle>
+            <md-button-toggle [value]="100">100</md-button-toggle>
+            <md-button-toggle [value]="1000">1000</md-button-toggle>
           </md-button-toggle-group>
         </div>
         <div flex layout="row" alignItems="center">
@@ -151,6 +159,8 @@ export class WebcamComponent {
   private mouseWebcam: Coordinate = {x: 0, y: 0};
   private mouseMotors: Coordinate = {x: 0, y: 0};
 
+  private arrowSteps: number = 1000;
+
   /**
    * Returns the URL of the camera image.
    */
@@ -223,8 +233,8 @@ export class WebcamComponent {
 
   private onMoveClick(where): void {
     this.cameraClick.emit({
-      x: this.motors.x + 1000 * (where.x || 0),
-      y: this.motors.y + 1000 * (where.y || 0)
+      x: this.motors.x + this.arrowSteps * (where.x || 0),
+      y: this.motors.y + this.arrowSteps * (where.y || 0)
     });
   }
 
