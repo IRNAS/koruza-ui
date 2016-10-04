@@ -64,9 +64,18 @@ interface Coordinate {
             <svg
               class="bounding-box"
               (click)="onCameraImageClick($event)"
+              (mousemove)="onCameraImageMouseMove($event)"
+              (mouseleave)="onCameraImageMouseLeave()"
               *ngIf="cameraImageLoaded"
             >
               <path [attr.d]="bbPath" fill="transparent" stroke="lime" stroke-width="2" />
+
+              <g *ngIf="mouseOverlay" transform="translate(10, 5)" class="mouse-coordinates">
+                <text x="0" y="0">
+                  <tspan x="0" dy="1.2em">Webcam: X={{mouseWebcam.x | number:'1.0-0'}} Y={{mouseWebcam.y | number:'1.0-0'}}</tspan>
+                  <tspan x="0" dy="1.2em">Motors: X={{mouseMotors.x | number:'1.0-0'}} Y={{mouseMotors.y | number:'1.0-0'}}</tspan>
+                </text>
+              </g>
             </svg>
 
             <div
@@ -123,6 +132,11 @@ export class WebcamComponent {
   private baseOffsetLeft: number = 0;
   private baseOffsetTop: number = 0;
 
+  private mouseOverlay: boolean = false;
+  private mouse: Coordinate = {x: 0, y: 0};
+  private mouseWebcam: Coordinate = {x: 0, y: 0};
+  private mouseMotors: Coordinate = {x: 0, y: 0};
+
   /**
    * Returns the URL of the camera image.
    */
@@ -147,6 +161,22 @@ export class WebcamComponent {
   private onCameraImageError(): void {
     this.cameraImageLoaded = false;
     this.cameraImageError = true;
+  }
+
+  private onCameraImageMouseMove(event: MouseEvent): void {
+    const boundingBox = this.cameraImage.nativeElement.getBoundingClientRect();
+
+    let x = event.clientX - boundingBox.left;
+    let y = event.clientY - boundingBox.top;
+
+    this.mouseOverlay = true;
+    this.mouse = {x, y};
+    this.mouseWebcam = this.mapBrowserToWebcam({x, y});
+    this.mouseMotors = this.mapReferenceToMotor(this.mapWebcamToReference(this.mouseWebcam));
+  }
+
+  private onCameraImageMouseLeave(): void {
+    this.mouseOverlay = false;
   }
 
   private onCameraImageClick(event: MouseEvent): void {
