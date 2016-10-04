@@ -3,6 +3,13 @@ import {Component, Input} from '@angular/core';
 
 import {KoruzaState, SfpState} from '../reducers/koruza';
 
+const ERROR_ENCODER_X_NOT_CONNECTED = 1 << 0;
+const ERROR_ENCODER_Y_NOT_CONNECTED = 1 << 1;
+const ERROR_ENCODER_X_MAG_LOW = 1 << 2;
+const ERROR_ENCODER_Y_MAG_LOW = 1 << 3;
+const ERROR_ENCODER_X_MAG_HIGH = 1 << 4;
+const ERROR_ENCODER_Y_MAG_HIGH = 1 << 5;
+
 @Component({
   selector: 'koruza-status',
   template: `
@@ -27,7 +34,11 @@ import {KoruzaState, SfpState} from '../reducers/koruza';
 
       <div *ngIf="hasErrors" class="status warning" flex layout="row">
         <md-icon>warning</md-icon>
-        <span>MCU Error {{status.errors.code}}</span>
+        <span>MCU Error</span>
+      </div>
+
+      <div *ngIf="hasErrors" flex layout="column">
+        <span class="error" *ngFor="let error of errors">{{error}}</span>
       </div>
 
       <!-- SFP -->
@@ -61,6 +72,20 @@ export class StatusComponent {
 
   private get hasErrors(): boolean {
     return _.isNumber(this.status.errors.code) && this.status.errors.code > 0;
+  }
+
+  private get errors(): string[] {
+    if (!this.hasErrors) return [];
+
+    let result: string[] = [];
+    const code = this.status.errors.code;
+    if (code & ERROR_ENCODER_X_NOT_CONNECTED) result.push("Encoder X not connected.");
+    if (code & ERROR_ENCODER_Y_NOT_CONNECTED) result.push("Encoder Y not connected.");
+    if (code & ERROR_ENCODER_X_MAG_LOW) result.push("Encoder X field too low.");
+    if (code & ERROR_ENCODER_Y_MAG_LOW) result.push("Encoder Y field too low.");
+    if (code & ERROR_ENCODER_X_MAG_HIGH) result.push("Encoder X field too high.");
+    if (code & ERROR_ENCODER_Y_MAG_HIGH) result.push("Encoder Y field too high.");
+    return result;
   }
 
   private get sfpConnected(): boolean {
