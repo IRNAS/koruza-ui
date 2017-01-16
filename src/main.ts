@@ -10,5 +10,4 @@ if (environment.production) {
   enableProdMode();
 }
 
-// TODO: Check how we can use static compilation for faster loads.
 platformBrowserDynamic().bootstrapModule(AppModule);
