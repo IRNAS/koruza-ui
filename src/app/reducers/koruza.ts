@@ -1,6 +1,7 @@
 import {Action} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 
+import {environment} from '../../environments/environment';
 import {KoruzaActions} from '../actions';
 
 import '@ngrx/core/add/operator/select';
@@ -35,6 +36,8 @@ export interface MotorState {
 }
 
 export interface CameraCalibrationState {
+  port: number;
+  path: string;
   width: number;
   height: number;
   offsetX: number;
@@ -69,6 +72,8 @@ const initialState: KoruzaState = {
   },
   sfps: {},
   cameraCalibration: {
+    port: environment.webcam.port,
+    path: environment.webcam.path,
     width: 1280,
     height: 720,
     offsetX: 0,
@@ -102,6 +107,8 @@ export function reducer(state = initialState, action: Action): KoruzaState {
         },
         sfps: status.sfps,
         cameraCalibration: {
+          port: status.camera_calibration.port || environment.webcam.port,
+          path: status.camera_calibration.path || environment.webcam.path,
           width: status.camera_calibration.width || 1280,
           height: status.camera_calibration.height || 720,
           offsetX: status.camera_calibration.offset_x,

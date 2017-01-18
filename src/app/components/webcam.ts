@@ -38,23 +38,30 @@ enum MouseMode {
   template: `
     <md-card class="camera-container">
       <div layout="column" alignItems="center">
-        <div>
-          <button md-icon-button (click)="onMoveClick({y: 1})" [disabled]="!cameraImageLoaded" [disableRipple]="true">
-              <md-icon>keyboard_arrow_up</md-icon>
-          </button>
-          <span>Mode:</span>
-          <md-button-toggle-group name="alignment" [(ngModel)]="mouseMode">
-            <md-button-toggle [value]="0">None</md-button-toggle>
-            <md-button-toggle [value]="1">Movement</md-button-toggle>
-            <md-button-toggle [value]="2">Calibration</md-button-toggle>
-          </md-button-toggle-group>
-          <span>Steps:</span>
-          <md-button-toggle-group name="steps" [(ngModel)]="arrowSteps">
-            <md-button-toggle [value]="1">1</md-button-toggle>
-            <md-button-toggle [value]="10">10</md-button-toggle>
-            <md-button-toggle [value]="100">100</md-button-toggle>
-            <md-button-toggle [value]="1000">1000</md-button-toggle>
-          </md-button-toggle-group>
+        <div flex layout="column" alignItems="center">
+          <div>
+            <span>Mode:</span>
+            <md-button-toggle-group name="alignment" [(ngModel)]="mouseMode">
+              <md-button-toggle [value]="0">None</md-button-toggle>
+              <md-button-toggle [value]="1">Movement</md-button-toggle>
+              <md-button-toggle [value]="2">Calibration</md-button-toggle>
+            </md-button-toggle-group>
+            <span>Steps:</span>
+            <md-button-toggle-group name="steps" [(ngModel)]="arrowSteps">
+              <md-button-toggle [value]="1">1</md-button-toggle>
+              <md-button-toggle [value]="10">10</md-button-toggle>
+              <md-button-toggle [value]="100">100</md-button-toggle>
+              <md-button-toggle [value]="1000">1000</md-button-toggle>
+            </md-button-toggle-group>
+          </div>
+          <div>
+            &nbsp;
+          </div>
+          <div>
+            <button md-icon-button (click)="onMoveClick({y: 1})" [disabled]="!cameraImageLoaded" [disableRipple]="true">
+                <md-icon>keyboard_arrow_up</md-icon>
+            </button>
+          </div>
         </div>
         <div flex layout="row" alignItems="center">
           <div>
@@ -72,7 +79,7 @@ enum MouseMode {
               (error)="onCameraImageError()"
               (click)="onCameraImageClick($event)"
               (window:resize)="onResize($event)"
-              *ngIf="!cameraImageError"
+              *ngIf="!!cameraUrl && !cameraImageError"
             />
 
             <div *ngIf="!cameraImageLoaded">
@@ -165,8 +172,9 @@ export class WebcamComponent {
    * Returns the URL of the camera image.
    */
   private get cameraUrl(): string {
-    const config: any = _.defaults({}, environment.webcam, {
-      host: window.location.host,
+    if (!this.calibration.path) return null;
+    const config: any = _.defaults({}, this.calibration, environment.webcam, {
+      host: window.location.hostname,
       port: window.location.port
     });
 

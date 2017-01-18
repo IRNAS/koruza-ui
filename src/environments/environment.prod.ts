@@ -4,7 +4,5 @@ export const environment = {
     endpoint: '/ubus'
   },
   webcam: {
-    port: 8080,
-    path: '/?action=stream'
   }
 };
