@@ -5,9 +5,9 @@ webpackJsonp([0,3],{
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ngrx_store__ = __webpack_require__(75);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__authentication__ = __webpack_require__(267);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__authentication__ = __webpack_require__(268);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__koruza__ = __webpack_require__(178);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ngrx_core_add_operator_select__ = __webpack_require__(265);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ngrx_core_add_operator_select__ = __webpack_require__(266);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ngrx_core_add_operator_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__ngrx_core_add_operator_select__);
 /* harmony export (immutable) */ exports["b"] = getAuthenticationState;
 /* harmony export (immutable) */ exports["c"] = getKoruzaState;
@@ -37,12 +37,14 @@ function getKoruzaState() {
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_core_add_operator_select__ = __webpack_require__(265);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_core_add_operator_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__ngrx_core_add_operator_select__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__environments_environment__ = __webpack_require__(179);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__actions__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_core_add_operator_select__ = __webpack_require__(266);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_core_add_operator_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__ngrx_core_add_operator_select__);
 /* harmony export (immutable) */ exports["a"] = reducer;
 /* harmony export (immutable) */ exports["b"] = getCameraCalibration;
 /* harmony export (immutable) */ exports["c"] = getMotors;
+
 
 
 var initialState = {
@@ -58,6 +60,8 @@ var initialState = {
     },
     sfps: {},
     cameraCalibration: {
+        port: __WEBPACK_IMPORTED_MODULE_0__environments_environment__["a" /* environment */].webcam.port,
+        path: __WEBPACK_IMPORTED_MODULE_0__environments_environment__["a" /* environment */].webcam.path,
         width: 1280,
         height: 720,
         offsetX: 0,
@@ -70,12 +74,12 @@ var initialState = {
 function reducer(state, action) {
     if (state === void 0) { state = initialState; }
     switch (action.type) {
-        case __WEBPACK_IMPORTED_MODULE_0__actions__["c" /* KoruzaActions */].UPDATE: {
+        case __WEBPACK_IMPORTED_MODULE_1__actions__["c" /* KoruzaActions */].UPDATE: {
             return Object.assign({}, state, {
                 isFetching: true
             });
         }
-        case __WEBPACK_IMPORTED_MODULE_0__actions__["c" /* KoruzaActions */].UPDATE_COMPLETE: {
+        case __WEBPACK_IMPORTED_MODULE_1__actions__["c" /* KoruzaActions */].UPDATE_COMPLETE: {
             var status = action.payload.status;
             return Object.assign({}, state, {
                 connected: status.connected,
@@ -90,6 +94,8 @@ function reducer(state, action) {
                 },
                 sfps: status.sfps,
                 cameraCalibration: {
+                    port: status.camera_calibration.port || __WEBPACK_IMPORTED_MODULE_0__environments_environment__["a" /* environment */].webcam.port,
+                    path: status.camera_calibration.path || __WEBPACK_IMPORTED_MODULE_0__environments_environment__["a" /* environment */].webcam.path,
                     width: status.camera_calibration.width || 1280,
                     height: status.camera_calibration.height || 720,
                     offsetX: status.camera_calibration.offset_x,
@@ -120,12 +126,30 @@ function getMotors() {
 
 /***/ },
 
-/***/ 267:
+/***/ 179:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return environment; });
+var environment = {
+    production: false,
+    ubus: {
+        endpoint: 'http://10.254.32.1:8000/ubus'
+    },
+    webcam: {
+        host: '10.254.32.1',
+    }
+};
+//# sourceMappingURL=/home/kostko/development/irnas/koruza-ui/src/environment.dev.js.map
+
+/***/ },
+
+/***/ 268:
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_core_add_operator_select__ = __webpack_require__(265);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_core_add_operator_select__ = __webpack_require__(266);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_core_add_operator_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__ngrx_core_add_operator_select__);
 /* harmony export (immutable) */ exports["b"] = reducer;
 /* harmony export (immutable) */ exports["a"] = isAuthenticated;
@@ -195,7 +219,7 @@ function getUsername() {
 
 /***/ },
 
-/***/ 268:
+/***/ 269:
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -211,27 +235,6 @@ function getUsername() {
     __WEBPACK_IMPORTED_MODULE_1__localstorage__["a" /* LocalStorageService */]
 ];
 //# sourceMappingURL=/home/kostko/development/irnas/koruza-ui/src/index.js.map
-
-/***/ },
-
-/***/ 269:
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return environment; });
-var environment = {
-    production: false,
-    ubus: {
-        endpoint: 'http://10.254.32.1:8000/ubus'
-    },
-    webcam: {
-        host: '10.254.32.1',
-        port: 8000,
-        path: '/camera.jpeg',
-        polling: true
-    }
-};
-//# sourceMappingURL=/home/kostko/development/irnas/koruza-ui/src/environment.dev.js.map
 
 /***/ },
 
@@ -273,14 +276,14 @@ var AppComponent = (function () {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(261);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(262);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_let__ = __webpack_require__(489);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_let___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_let__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_take__ = __webpack_require__(866);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_take___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_take__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__reducers__ = __webpack_require__(177);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__reducers_authentication__ = __webpack_require__(267);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__reducers_authentication__ = __webpack_require__(268);
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return AuthenticationGuard; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -398,7 +401,7 @@ var DashboardPageComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_let__ = __webpack_require__(489);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_let___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_let__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__reducers__ = __webpack_require__(177);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__reducers_authentication__ = __webpack_require__(267);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__reducers_authentication__ = __webpack_require__(268);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__actions__ = __webpack_require__(76);
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return LoginPageComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -469,7 +472,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__polyfills__ = __webpack_require__(695);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser_dynamic__ = __webpack_require__(636);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(269);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(179);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app__ = __webpack_require__(687);
 
 
@@ -733,7 +736,7 @@ var StatusComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(484);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__environments_environment__ = __webpack_require__(269);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__environments_environment__ = __webpack_require__(179);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__reducers_koruza__ = __webpack_require__(178);
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return WebcamComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -789,8 +792,10 @@ var WebcamComponent = (function () {
          * Returns the URL of the camera image.
          */
         get: function () {
-            var config = __WEBPACK_IMPORTED_MODULE_0_lodash__["defaults"]({}, __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */].webcam, {
-                host: window.location.host,
+            if (!this.calibration.path)
+                return null;
+            var config = __WEBPACK_IMPORTED_MODULE_0_lodash__["defaults"]({}, this.calibration, __WEBPACK_IMPORTED_MODULE_2__environments_environment__["a" /* environment */].webcam, {
+                host: window.location.hostname,
                 port: window.location.port
             });
             return "http://" + config.host + ":" + config.port + config.path;
@@ -1060,7 +1065,7 @@ var WebcamComponent = (function () {
     WebcamComponent = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["_2" /* Component */])({
             selector: 'koruza-webcam',
-            template: "\n    <md-card class=\"camera-container\">\n      <div layout=\"column\" alignItems=\"center\">\n        <div>\n          <button md-icon-button (click)=\"onMoveClick({y: 1})\" [disabled]=\"!cameraImageLoaded\" [disableRipple]=\"true\">\n              <md-icon>keyboard_arrow_up</md-icon>\n          </button>\n          <span>Mode:</span>\n          <md-button-toggle-group name=\"alignment\" [(ngModel)]=\"mouseMode\">\n            <md-button-toggle [value]=\"0\">None</md-button-toggle>\n            <md-button-toggle [value]=\"1\">Movement</md-button-toggle>\n            <md-button-toggle [value]=\"2\">Calibration</md-button-toggle>\n          </md-button-toggle-group>\n          <span>Steps:</span>\n          <md-button-toggle-group name=\"steps\" [(ngModel)]=\"arrowSteps\">\n            <md-button-toggle [value]=\"1\">1</md-button-toggle>\n            <md-button-toggle [value]=\"10\">10</md-button-toggle>\n            <md-button-toggle [value]=\"100\">100</md-button-toggle>\n            <md-button-toggle [value]=\"1000\">1000</md-button-toggle>\n          </md-button-toggle-group>\n        </div>\n        <div flex layout=\"row\" alignItems=\"center\">\n          <div>\n            <button md-icon-button (click)=\"onMoveClick({x: -1})\" [disabled]=\"!cameraImageLoaded\" [disableRipple]=\"true\">\n              <md-icon>keyboard_arrow_left</md-icon>\n            </button>\n          </div>\n          <div flex class=\"camera-image-container\">\n            <img\n              #cameraImage\n              class=\"camera\"\n              [src]=\"cameraUrl\"\n              [style.visibility]=\"cameraImageLoaded ? 'visible' : 'hidden'\"\n              (load)=\"onCameraImageLoad()\"\n              (error)=\"onCameraImageError()\"\n              (click)=\"onCameraImageClick($event)\"\n              (window:resize)=\"onResize($event)\"\n              *ngIf=\"!cameraImageError\"\n            />\n\n            <div *ngIf=\"!cameraImageLoaded\">\n              <md-spinner *ngIf=\"!cameraImageError\"></md-spinner>\n              <div *ngIf=\"cameraImageError\">Camera image unavailable.</div>\n            </div>\n\n            <svg\n              class=\"bounding-box\"\n              (click)=\"onCameraImageClick($event)\"\n              (mousemove)=\"onCameraImageMouseMove($event)\"\n              (mouseleave)=\"onCameraImageMouseLeave()\"\n              *ngIf=\"cameraImageLoaded\"\n            >\n              <path [attr.d]=\"bbPath\" fill=\"transparent\" stroke=\"lime\" stroke-width=\"2\" />\n\n              <g *ngIf=\"mouseOverlay\" transform=\"translate(10, 5)\" class=\"mouse-coordinates\">\n                <text x=\"0\" y=\"0\">\n                  <tspan x=\"0\" dy=\"1.2em\">Webcam: X={{mouseWebcam.x | number:'1.0-0'}} Y={{mouseWebcam.y | number:'1.0-0'}}</tspan>\n                  <tspan x=\"0\" dy=\"1.2em\">Motors: X={{mouseMotors.x | number:'1.0-0'}} Y={{mouseMotors.y | number:'1.0-0'}}</tspan>\n                </text>\n              </g>\n            </svg>\n\n            <div\n              class=\"camera-center\"\n              [style.width.px]=\"centerBox.width\"\n              [style.height.px]=\"centerBox.height\"\n              [style.left.px]=\"centerBox.left\"\n              [style.top.px]=\"centerBox.top\"\n              *ngIf=\"cameraImageLoaded && centerBox.visible\"\n            >\n              <md-icon\n                class=\"camera-cross\"\n                [style.left.px]=\"centerBox.width / 4\"\n                [style.top.px]=\"centerBox.height / 4\"\n                [style.width.px]=\"centerBox.width / 2\"\n                [style.height.px]=\"centerBox.height / 2\"\n                [style.fontSize.px]=\"(centerBox.width + centerBox.height) / 4\"\n              >\n                add\n              </md-icon>\n            </div>\n          </div>\n          <div>\n            <button md-icon-button (click)=\"onMoveClick({x: 1})\" [disabled]=\"!cameraImageLoaded\" [disableRipple]=\"true\">\n              <md-icon>keyboard_arrow_right</md-icon>\n            </button>\n          </div>\n        </div>\n        <div>\n          <button md-icon-button (click)=\"onMoveClick({y: -1})\" [disabled]=\"!cameraImageLoaded\" [disableRipple]=\"true\">\n            <md-icon>keyboard_arrow_down</md-icon>\n          </button>\n        </div>\n      </div>\n    </md-card>\n  ",
+            template: "\n    <md-card class=\"camera-container\">\n      <div layout=\"column\" alignItems=\"center\">\n        <div flex layout=\"column\" alignItems=\"center\">\n          <div>\n            <span>Mode:</span>\n            <md-button-toggle-group name=\"alignment\" [(ngModel)]=\"mouseMode\">\n              <md-button-toggle [value]=\"0\">None</md-button-toggle>\n              <md-button-toggle [value]=\"1\">Movement</md-button-toggle>\n              <md-button-toggle [value]=\"2\">Calibration</md-button-toggle>\n            </md-button-toggle-group>\n            <span>Steps:</span>\n            <md-button-toggle-group name=\"steps\" [(ngModel)]=\"arrowSteps\">\n              <md-button-toggle [value]=\"1\">1</md-button-toggle>\n              <md-button-toggle [value]=\"10\">10</md-button-toggle>\n              <md-button-toggle [value]=\"100\">100</md-button-toggle>\n              <md-button-toggle [value]=\"1000\">1000</md-button-toggle>\n            </md-button-toggle-group>\n          </div>\n          <div>\n            &nbsp;\n          </div>\n          <div>\n            <button md-icon-button (click)=\"onMoveClick({y: 1})\" [disabled]=\"!cameraImageLoaded\" [disableRipple]=\"true\">\n                <md-icon>keyboard_arrow_up</md-icon>\n            </button>\n          </div>\n        </div>\n        <div flex layout=\"row\" alignItems=\"center\">\n          <div>\n            <button md-icon-button (click)=\"onMoveClick({x: -1})\" [disabled]=\"!cameraImageLoaded\" [disableRipple]=\"true\">\n              <md-icon>keyboard_arrow_left</md-icon>\n            </button>\n          </div>\n          <div flex class=\"camera-image-container\">\n            <img\n              #cameraImage\n              class=\"camera\"\n              [src]=\"cameraUrl\"\n              [style.visibility]=\"cameraImageLoaded ? 'visible' : 'hidden'\"\n              (load)=\"onCameraImageLoad()\"\n              (error)=\"onCameraImageError()\"\n              (click)=\"onCameraImageClick($event)\"\n              (window:resize)=\"onResize($event)\"\n              *ngIf=\"!!cameraUrl && !cameraImageError\"\n            />\n\n            <div *ngIf=\"!cameraImageLoaded\">\n              <md-spinner *ngIf=\"!cameraImageError\"></md-spinner>\n              <div *ngIf=\"cameraImageError\">Camera image unavailable.</div>\n            </div>\n\n            <svg\n              class=\"bounding-box\"\n              (click)=\"onCameraImageClick($event)\"\n              (mousemove)=\"onCameraImageMouseMove($event)\"\n              (mouseleave)=\"onCameraImageMouseLeave()\"\n              *ngIf=\"cameraImageLoaded\"\n            >\n              <path [attr.d]=\"bbPath\" fill=\"transparent\" stroke=\"lime\" stroke-width=\"2\" />\n\n              <g *ngIf=\"mouseOverlay\" transform=\"translate(10, 5)\" class=\"mouse-coordinates\">\n                <text x=\"0\" y=\"0\">\n                  <tspan x=\"0\" dy=\"1.2em\">Webcam: X={{mouseWebcam.x | number:'1.0-0'}} Y={{mouseWebcam.y | number:'1.0-0'}}</tspan>\n                  <tspan x=\"0\" dy=\"1.2em\">Motors: X={{mouseMotors.x | number:'1.0-0'}} Y={{mouseMotors.y | number:'1.0-0'}}</tspan>\n                </text>\n              </g>\n            </svg>\n\n            <div\n              class=\"camera-center\"\n              [style.width.px]=\"centerBox.width\"\n              [style.height.px]=\"centerBox.height\"\n              [style.left.px]=\"centerBox.left\"\n              [style.top.px]=\"centerBox.top\"\n              *ngIf=\"cameraImageLoaded && centerBox.visible\"\n            >\n              <md-icon\n                class=\"camera-cross\"\n                [style.left.px]=\"centerBox.width / 4\"\n                [style.top.px]=\"centerBox.height / 4\"\n                [style.width.px]=\"centerBox.width / 2\"\n                [style.height.px]=\"centerBox.height / 2\"\n                [style.fontSize.px]=\"(centerBox.width + centerBox.height) / 4\"\n              >\n                add\n              </md-icon>\n            </div>\n          </div>\n          <div>\n            <button md-icon-button (click)=\"onMoveClick({x: 1})\" [disabled]=\"!cameraImageLoaded\" [disableRipple]=\"true\">\n              <md-icon>keyboard_arrow_right</md-icon>\n            </button>\n          </div>\n        </div>\n        <div>\n          <button md-icon-button (click)=\"onMoveClick({y: -1})\" [disabled]=\"!cameraImageLoaded\" [disableRipple]=\"true\">\n            <md-icon>keyboard_arrow_down</md-icon>\n          </button>\n        </div>\n      </div>\n    </md-card>\n  ",
             styles: [__webpack_require__(851)],
         }), 
         __metadata('design:paramtypes', [])
@@ -1208,13 +1213,13 @@ var LayoutDirective = (function () {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(261);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_effects__ = __webpack_require__(266);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_effects__ = __webpack_require__(267);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_switchMap__ = __webpack_require__(490);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_switchMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_switchMap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__actions__ = __webpack_require__(76);
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return AuthenticationEffects; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1360,7 +1365,7 @@ var AuthenticationEffects = (function () {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_effects__ = __webpack_require__(266);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_effects__ = __webpack_require__(267);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_observable_timer__ = __webpack_require__(876);
@@ -1369,7 +1374,7 @@ var AuthenticationEffects = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_switchMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_switchMap__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_observable_zip__ = __webpack_require__(861);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_add_observable_zip___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_add_observable_zip__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__actions__ = __webpack_require__(76);
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return KoruzaEffects; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1525,16 +1530,16 @@ var KoruzaEffects = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(63);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__(44);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__(261);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__(262);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ngrx_store__ = __webpack_require__(75);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ngrx_effects__ = __webpack_require__(266);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ngrx_effects__ = __webpack_require__(267);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_material__ = __webpack_require__(617);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app__ = __webpack_require__(443);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__routes__ = __webpack_require__(692);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__reducers__ = __webpack_require__(177);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__effects__ = __webpack_require__(684);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__actions__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__directives__ = __webpack_require__(681);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__components__ = __webpack_require__(677);
@@ -1762,7 +1767,7 @@ var LocalStorageService = (function () {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(162);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__environments_environment__ = __webpack_require__(269);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__environments_environment__ = __webpack_require__(179);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__ = __webpack_require__(130);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_do__ = __webpack_require__(487);
