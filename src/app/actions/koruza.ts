@@ -40,4 +40,12 @@ export class KoruzaActions {
       payload: {x, y}
     }
   }
+
+  static HOMING = 'koruza.homing';
+  public homing(): Action {
+    return {
+      type: KoruzaActions.HOMING,
+      payload: {}
+    }
+  }
 }

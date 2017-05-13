@@ -91,4 +91,11 @@ export class KoruzaEffects {
         .map(() => this.actions.update())
         .catch(() => Observable.of(this.actions.update()))
     );
+
+  /**
+   * Handle homing command.
+   */
+  @Effect({dispatch: false}) homing = this.updates
+    .ofType(KoruzaActions.HOMING)
+    .switchMap(action => this.ubus.call('koruza.homing'));
 }

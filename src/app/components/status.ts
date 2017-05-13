@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 
 import {KoruzaState, SfpState} from '../reducers/koruza';
 
@@ -62,6 +62,17 @@ const ERROR_ENCODER_Y_MAG_HIGH = 1 << 5;
         <span class="datum-name">TX Power</span>
         <span>{{sfp.diagnostics.txPower}} ({{sfp.diagnostics.txPower | dbm}} dBm)</span>
       </div>
+
+      <!-- Controls -->
+      <div *ngIf="sfpConnected" class="status ok" flex layout="row">
+        <md-icon>settings</md-icon>
+        <span>Controls</span>
+      </div>
+
+      <div flex layout="row">
+        <button md-raised-button flex="90" (click)="homingClick.emit(null)">Homing</button>
+        <span flex="10"></span>
+      </div>
     </div>
   `,
   styleUrls: ['status.scss'],
@@ -69,6 +80,8 @@ const ERROR_ENCODER_Y_MAG_HIGH = 1 << 5;
 export class StatusComponent {
   // Unit status report.
   @Input() public status: KoruzaState;
+  // Homing request.
+  @Output() public homingClick: EventEmitter<any> = new EventEmitter<any>();
 
   public get hasErrors(): boolean {
     return _.isNumber(this.status.errors.code) && this.status.errors.code > 0;

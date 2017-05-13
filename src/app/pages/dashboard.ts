@@ -13,7 +13,11 @@ import {WebcamCoordinates} from '../components/webcam';
   selector: 'dashboard-page',
   template: `
     <div layout="row">
-      <koruza-status [status]="unitStatus | async"></koruza-status>
+      <koruza-status
+        [status]="unitStatus | async"
+        (homingClick)="onHomingClick()"
+      >
+      </koruza-status>
 
       <koruza-webcam
         [calibration]="cameraCalibration | async"
@@ -54,5 +58,9 @@ export class DashboardPageComponent {
       Math.round(coordinates.x),
       Math.round(coordinates.y))
     );
+  }
+
+  public onHomingClick(): void {
+    this.store.dispatch(this.koruzaActions.homing());
   }
 }
