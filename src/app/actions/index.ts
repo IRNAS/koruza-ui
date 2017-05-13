@@ -4,7 +4,7 @@ import {KoruzaActions} from './koruza';
 export {AuthenticationActions};
 export {KoruzaActions};
 
-export default [
+export const actions = [
   AuthenticationActions,
   KoruzaActions
 ];

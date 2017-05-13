@@ -3,7 +3,7 @@ import {FlexDirective} from './flex';
 
 export {LayoutDirective, FlexDirective};
 
-export default [
+export const directives = [
   LayoutDirective,
   FlexDirective
 ];

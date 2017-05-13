@@ -4,7 +4,7 @@ import {KoruzaEffects} from './koruza';
 export {AuthenticationEffects};
 export {KoruzaEffects};
 
-export default [
+export const effects = [
   AuthenticationEffects,
   KoruzaEffects
 ];

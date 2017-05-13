@@ -2,6 +2,6 @@ import {AuthenticationGuard} from './authentication';
 
 export {AuthenticationGuard};
 
-export default [
+export const guards = [
   AuthenticationGuard
 ];

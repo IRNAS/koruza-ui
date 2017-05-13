@@ -4,7 +4,7 @@ import {StatusComponent} from './status';
 export {WebcamComponent};
 export {StatusComponent};
 
-export default [
+export const components = [
   WebcamComponent,
   StatusComponent
 ];

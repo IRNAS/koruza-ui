@@ -3,7 +3,7 @@ import {LocalStorageService} from './localstorage';
 
 export {UbusService, LocalStorageService};
 
-export default [
+export const services = [
   UbusService,
   LocalStorageService
 ];

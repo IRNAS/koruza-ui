@@ -24,22 +24,24 @@ import {AuthenticationActions} from '../actions';
             (ngSubmit)="onSubmit()"
             #loginForm="ngForm">
 
-            <md-input
-              flex
-              required
-              name="username"
-              placeholder="Username"
-              [(ngModel)]="username">
-            </md-input>
+            <md-input-container flex>
+              <input
+                mdInput
+                required
+                name="username"
+                placeholder="Username"
+                [(ngModel)]="username">
+            </md-input-container>
 
-            <md-input
-              flex
-              required
-              name="password"
-              type="password"
-              placeholder="Password"
-              [(ngModel)]="password">
-            </md-input>
+            <md-input-container flex>
+              <input
+                mdInput
+                required
+                name="password"
+                type="password"
+                placeholder="Password"
+                [(ngModel)]="password">
+            </md-input-container>
 
             <div *ngIf="!(isAuthenticating | async)" flex layout="row">
               <div flex></div>

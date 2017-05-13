@@ -68,13 +68,13 @@ const ERROR_ENCODER_Y_MAG_HIGH = 1 << 5;
 })
 export class StatusComponent {
   // Unit status report.
-  @Input() private status: KoruzaState;
+  @Input() public status: KoruzaState;
 
-  private get hasErrors(): boolean {
+  public get hasErrors(): boolean {
     return _.isNumber(this.status.errors.code) && this.status.errors.code > 0;
   }
 
-  private get errors(): string[] {
+  public get errors(): string[] {
     if (!this.hasErrors) return [];
 
     let result: string[] = [];
@@ -88,11 +88,11 @@ export class StatusComponent {
     return result;
   }
 
-  private get sfpConnected(): boolean {
+  public get sfpConnected(): boolean {
     return !_.isEmpty(this.status.sfps);
   }
 
-  private get sfp(): SfpState {
+  public get sfp(): SfpState {
     return _.first(_.values<SfpState>(this.status.sfps));
   }
 }

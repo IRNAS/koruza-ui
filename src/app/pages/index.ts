@@ -4,7 +4,7 @@ import {LoginPageComponent} from './login';
 export {DashboardPageComponent};
 export {LoginPageComponent};
 
-export default [
+export const pages = [
   DashboardPageComponent,
   LoginPageComponent
 ];

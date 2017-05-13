@@ -2,6 +2,6 @@ import {DbmPipe} from './dbm';
 
 export {DbmPipe};
 
-export default [
+export const pipes = [
   DbmPipe
 ];

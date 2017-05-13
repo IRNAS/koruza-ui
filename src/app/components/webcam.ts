@@ -152,26 +152,26 @@ export class WebcamComponent {
 
   @ViewChild('cameraImage') private cameraImage: ElementRef;
 
-  private cameraImageLoaded: boolean = false;
-  private cameraImageError: boolean = false;
+  public cameraImageLoaded: boolean = false;
+  public cameraImageError: boolean = false;
 
   private baseWidth: number = 0;
   private baseHeight: number = 0;
   private baseOffsetLeft: number = 0;
   private baseOffsetTop: number = 0;
 
-  private mouseMode: MouseMode = MouseMode.NONE;
+  public mouseMode: MouseMode = MouseMode.NONE;
   private mouseOverlay: boolean = false;
   private mouse: Coordinate = {x: 0, y: 0};
   private mouseWebcam: Coordinate = {x: 0, y: 0};
   private mouseMotors: Coordinate = {x: 0, y: 0};
 
-  private arrowSteps: number = 1000;
+  public arrowSteps: number = 1000;
 
   /**
    * Returns the URL of the camera image.
    */
-  private get cameraUrl(): string {
+  public get cameraUrl(): string {
     if (!this.calibration.path) return null;
     const config: any = _.defaults({}, this.calibration, environment.webcam, {
       host: window.location.hostname,
@@ -239,7 +239,7 @@ export class WebcamComponent {
 
   }
 
-  private onMoveClick(where): void {
+  public onMoveClick(where): void {
     this.cameraClick.emit({
       x: this.motors.x + this.arrowSteps * (where.x || 0),
       y: this.motors.y + this.arrowSteps * (where.y || 0)
@@ -428,7 +428,7 @@ export class WebcamComponent {
     return bbPath.join(' ');
   }
 
-  private get centerBox() {
+  public get centerBox() {
     // Compute the size of the center overlay.
     const centerSize = this.mapWebcamToBrowser({x: WEBCAM_CENTER_WIDTH, y: WEBCAM_CENTER_HEIGHT});
     // Compute the current position of the center overlay.

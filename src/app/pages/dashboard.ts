@@ -28,27 +28,27 @@ import {WebcamCoordinates} from '../components/webcam';
   styleUrls: ['dashboard.scss'],
 })
 export class DashboardPageComponent {
-  private cameraCalibration = this.store
+  public cameraCalibration = this.store
     .let(getKoruzaState())
     .let(getCameraCalibration());
 
-  private motors = this.store
+  public motors = this.store
     .let(getKoruzaState())
     .let(getMotors());
 
-  private unitStatus = this.store
+  public unitStatus = this.store
     .let(getKoruzaState());
 
   constructor(private store: Store<AppState>,
               private koruzaActions: KoruzaActions) {
   }
 
-  private onWebcamClick(coordinates: WebcamCoordinates): void {
+  public onWebcamClick(coordinates: WebcamCoordinates): void {
     // Request the motors to move based on coordinates.
     this.store.dispatch(this.koruzaActions.moveMotors(coordinates.x, coordinates.y));
   }
 
-  private onWebcamCalibrationSet(coordinates: WebcamCoordinates): void {
+  public onWebcamCalibrationSet(coordinates: WebcamCoordinates): void {
     // Request the driver to configure webcam calibration.
     this.store.dispatch(this.koruzaActions.setCalibration(
       Math.round(coordinates.x),
