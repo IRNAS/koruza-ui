@@ -535,6 +535,8 @@ var LEAVER = 115.8;
 var ANGLE_PER_STEP = Math.atan(ROTATION_DISTANCE / (STEPS_PER_ROTATION * LEAVER));
 // TODO: Get the rotation angle from somewhere.
 var ROTATION_ANGLE = 0;
+// Special position, which can be used when a coordinate is not available.
+var POSITION_UNDEFINED = -2147483648;
 var MouseMode;
 (function (MouseMode) {
     MouseMode[MouseMode["NONE"] = 0] = "NONE";
@@ -621,9 +623,16 @@ var WebcamComponent = (function () {
         }
     };
     WebcamComponent.prototype.onMoveClick = function (where) {
+        var _this = this;
+        var transform = function (current, delta) {
+            // Replace undefined coordinates with special value.
+            if (!delta)
+                return POSITION_UNDEFINED;
+            return current + _this.arrowSteps * delta;
+        };
         this.cameraClick.emit({
-            x: this.motors.x + this.arrowSteps * (where.x || 0),
-            y: this.motors.y + this.arrowSteps * (where.y || 0)
+            x: transform(this.motors.x, where.x),
+            y: transform(this.motors.y, where.y)
         });
     };
     /**

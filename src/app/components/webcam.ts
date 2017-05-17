@@ -17,6 +17,9 @@ const ANGLE_PER_STEP = Math.atan(ROTATION_DISTANCE / (STEPS_PER_ROTATION * LEAVE
 // TODO: Get the rotation angle from somewhere.
 const ROTATION_ANGLE = 0;
 
+// Special position, which can be used when a coordinate is not available.
+const POSITION_UNDEFINED = -2147483648;
+
 export interface WebcamCoordinates {
   x: number;
   y: number;
@@ -240,9 +243,16 @@ export class WebcamComponent {
   }
 
   public onMoveClick(where): void {
+    const transform = (current, delta) => {
+      // Replace undefined coordinates with special value.
+      if (!delta) return POSITION_UNDEFINED;
+
+      return current + this.arrowSteps * delta;
+    }
+
     this.cameraClick.emit({
-      x: this.motors.x + this.arrowSteps * (where.x || 0),
-      y: this.motors.y + this.arrowSteps * (where.y || 0)
+      x: transform(this.motors.x, where.x),
+      y: transform(this.motors.y, where.y)
     });
   }
 
