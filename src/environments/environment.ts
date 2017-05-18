@@ -6,10 +6,10 @@
 export const environment = {
   production: false,
   ubus: {
-    endpoint: 'http://10.254.169.121/ubus'
+    endpoint: 'http://10.254.169.71/ubus'
   },
   webcam: {
-    host: '10.254.169.121',
+    host: '10.254.169.71',
     port: 80,
     path: '/?action=stream'
   }

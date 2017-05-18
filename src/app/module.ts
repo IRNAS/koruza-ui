@@ -10,7 +10,7 @@ import {EffectsModule} from '@ngrx/effects';
 
 import {MdSidenavModule, MdListModule, MdIconModule, MdButtonModule,
   MdToolbarModule, MdCardModule, MdProgressSpinnerModule,
-  MdButtonToggleModule, MdInputModule} from '@angular/material';
+  MdButtonToggleModule, MdInputModule, MdSlideToggleModule} from '@angular/material';
 
 import {AppComponent} from './app';
 import {routes} from './routes';
@@ -48,6 +48,7 @@ import {pipes} from './pipes';
     MdProgressSpinnerModule,
     MdButtonToggleModule,
     MdInputModule,
+    MdSlideToggleModule,
   ],
   declarations: [
     ...pipes,

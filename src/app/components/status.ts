@@ -73,6 +73,15 @@ const ERROR_ENCODER_Y_MAG_HIGH = 1 << 5;
         <button md-raised-button flex="90" (click)="homingClick.emit(null)">Homing</button>
         <span flex="10"></span>
       </div>
+
+      <div flex layout="row">
+        <md-slide-toggle
+          [checked]="status.leds.state"
+          (change)="ledsStateChange.emit($event.checked)"
+        >
+          LEDs
+        </md-slide-toggle>
+      </div>
     </div>
   `,
   styleUrls: ['status.scss'],
@@ -82,6 +91,8 @@ export class StatusComponent {
   @Input() public status: KoruzaState;
   // Homing request.
   @Output() public homingClick: EventEmitter<any> = new EventEmitter<any>();
+  // LED toggle.
+  @Output() public ledsStateChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   public get hasErrors(): boolean {
     return _.isNumber(this.status.errors.code) && this.status.errors.code > 0;

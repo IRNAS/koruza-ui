@@ -16,6 +16,7 @@ import {WebcamCoordinates} from '../components/webcam';
       <koruza-status
         [status]="unitStatus | async"
         (homingClick)="onHomingClick()"
+        (ledsStateChange)="onLedsStateChange($event)"
       >
       </koruza-status>
 
@@ -62,5 +63,9 @@ export class DashboardPageComponent {
 
   public onHomingClick(): void {
     this.store.dispatch(this.koruzaActions.homing());
+  }
+
+  public onLedsStateChange(state: boolean): void {
+    this.store.dispatch(this.koruzaActions.setLeds(state));
   }
 }

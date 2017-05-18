@@ -93,6 +93,19 @@ export class KoruzaEffects {
     );
 
   /**
+   * Handle set leds command.
+   */
+  @Effect() ledsSet = this.updates
+    .ofType(KoruzaActions.SET_LEDS)
+    .switchMap(action =>
+      this.ubus.call('koruza.set_leds', {
+        state: action.payload.state,
+      })
+        .map(() => this.actions.update())
+        .catch(() => Observable.of(this.actions.update()))
+    );
+
+  /**
    * Handle homing command.
    */
   @Effect({dispatch: false}) homing = this.updates

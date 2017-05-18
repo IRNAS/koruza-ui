@@ -41,6 +41,14 @@ export class KoruzaActions {
     }
   }
 
+  static SET_LEDS = 'koruza.set_leds';
+  public setLeds(state: boolean): Action {
+    return {
+      type: KoruzaActions.SET_LEDS,
+      payload: {state}
+    }
+  }
+
   static HOMING = 'koruza.homing';
   public homing(): Action {
     return {

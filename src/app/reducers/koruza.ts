@@ -49,8 +49,13 @@ export interface ErrorState {
   code: number;
 }
 
+export interface LedsState {
+  state: boolean;
+}
+
 export interface KoruzaState {
   connected: boolean;
+  leds: LedsState;
   errors: ErrorState;
   motors: MotorState;
   sfps: SfpStateMap;
@@ -61,6 +66,9 @@ export interface KoruzaState {
 
 const initialState: KoruzaState = {
   connected: false,
+  leds: {
+    state: true,
+  },
   errors: {
     code: 0,
   },
@@ -96,6 +104,9 @@ export function reducer(state = initialState, action: Action): KoruzaState {
 
       return Object.assign({}, state, {
         connected: status.connected,
+        leds: {
+          state: status.leds.state,
+        },
         errors: {
           code: status.errors.code,
         },
