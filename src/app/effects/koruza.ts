@@ -23,6 +23,11 @@ export class KoruzaEffects {
   @Effect() periodicRefresh = timer(0, 1000).map(() => this.actions.update());
 
   /**
+   * Periodically refresh survey from the remote node.
+   */
+  @Effect() periodicSurvey = timer(0, 2000).map(() => this.actions.survey());
+
+  /**
    * Handle state refresh via an uBus call.
    */
   @Effect() refreshState = this.updates
@@ -62,6 +67,17 @@ export class KoruzaEffects {
           }
         )
         .catch(() => Observable.of(this.actions.updateFailed())));
+
+  /**
+   * Handle survey refresh.
+   */
+  @Effect() refreshSurvey = this.updates
+    .ofType(KoruzaActions.SURVEY)
+    .switchMap(action =>
+      this.ubus.call('koruza.get_survey')
+        .map((survey) => this.actions.surveyComplete(survey))
+        .catch(() => Observable.of(this.actions.surveyFailed()))
+    );
 
   /**
    * Handle motor move command.
@@ -108,7 +124,22 @@ export class KoruzaEffects {
   /**
    * Handle homing command.
    */
-  @Effect({dispatch: false}) homing = this.updates
+  @Effect() homing = this.updates
     .ofType(KoruzaActions.HOMING)
-    .switchMap(action => this.ubus.call('koruza.homing'));
+    .switchMap(action =>
+      this.ubus.call('koruza.homing')
+        .map(() => this.actions.update())
+        .catch(() => Observable.of(this.actions.update()))
+    );
+
+  /**
+   * Handle survey reset command.
+   */
+  @Effect() surveyReset = this.updates
+    .ofType(KoruzaActions.SURVEY_RESET)
+    .switchMap(action =>
+      this.ubus.call('koruza.reset_survey')
+        .map(() => this.actions.survey())
+        .catch(() => Observable.of(this.actions.survey()))
+    );
 }

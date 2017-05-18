@@ -1,8 +1,10 @@
 import * as _ from 'lodash';
+import {Observable} from 'rxjs/Observable';
 import {Component, Input, Output, ViewChild, ElementRef, EventEmitter} from '@angular/core';
 
 import {environment} from '../../environments/environment';
-import {CameraCalibrationState, MotorState} from '../reducers/koruza';
+import {CameraCalibrationState, MotorState, Survey} from '../reducers/koruza';
+import {Coordinate} from '../utils';
 
 const WEBCAM_CENTER_WIDTH = 40;
 const WEBCAM_CENTER_HEIGHT = 40;
@@ -21,11 +23,6 @@ const ROTATION_ANGLE = 0;
 const POSITION_UNDEFINED = -2147483648;
 
 export interface WebcamCoordinates {
-  x: number;
-  y: number;
-}
-
-interface Coordinate {
   x: number;
   y: number;
 }
@@ -56,6 +53,19 @@ enum MouseMode {
               <md-button-toggle [value]="100">100</md-button-toggle>
               <md-button-toggle [value]="1000">1000</md-button-toggle>
             </md-button-toggle-group>
+            <button md-raised-button [mdMenuTriggerFor]="surveyMenu">
+              <md-icon>settings</md-icon>
+              <span>Survey</span>
+            </button>
+            <md-menu #surveyMenu="mdMenu">
+              <button md-menu-item (click)="onSurveyToggleClick()">
+                <span>Toggle visibility</span>
+              </button>
+              <button md-menu-item (click)="onSurveyResetClick()">
+                <md-icon>clear</md-icon>
+                <span>Reset</span>
+              </button>
+            </md-menu>
           </div>
           <div>
             &nbsp;
@@ -73,6 +83,17 @@ enum MouseMode {
             </button>
           </div>
           <div flex class="camera-image-container">
+            <div koruza-survey-heatmap
+              *ngIf="surveyEnabled"
+              [survey]="survey"
+              [mapMotorToBrowser]="surveyConfig.mapMotorToBrowser"
+              [width]="baseWidth"
+              [height]="baseHeight"
+              [style.left.px]="baseOffsetLeft"
+              [style.top.px]="baseOffsetTop"
+            >
+            </div>
+
             <img
               #cameraImage
               class="camera"
@@ -97,14 +118,14 @@ enum MouseMode {
               (mouseleave)="onCameraImageMouseLeave()"
               *ngIf="cameraImageLoaded"
             >
-              <path [attr.d]="bbPath" fill="transparent" stroke="lime" stroke-width="2" />
+              <svg:path [attr.d]="bbPath" fill="transparent" stroke="lime" stroke-width="2" />
 
-              <g *ngIf="mouseOverlay" transform="translate(10, 5)" class="mouse-coordinates">
-                <text x="0" y="0">
-                  <tspan x="0" dy="1.2em">Webcam: X={{mouseWebcam.x | number:'1.0-0'}} Y={{mouseWebcam.y | number:'1.0-0'}}</tspan>
-                  <tspan x="0" dy="1.2em">Motors: X={{mouseMotors.x | number:'1.0-0'}} Y={{mouseMotors.y | number:'1.0-0'}}</tspan>
-                </text>
-              </g>
+              <svg:g *ngIf="mouseOverlay" transform="translate(10, 5)" class="mouse-coordinates">
+                <svg:text x="0" y="0">
+                  <svg:tspan x="0" dy="1.2em">Webcam: X={{mouseWebcam.x | number:'1.0-0'}} Y={{mouseWebcam.y | number:'1.0-0'}}</tspan>
+                  <svg:tspan x="0" dy="1.2em">Motors: X={{mouseMotors.x | number:'1.0-0'}} Y={{mouseMotors.y | number:'1.0-0'}}</tspan>
+                </svg:text>
+              </svg:g>
             </svg>
 
             <div
@@ -148,20 +169,24 @@ export class WebcamComponent {
   @Input() private calibration: CameraCalibrationState;
   // Motor position data.
   @Input() private motors: MotorState;
+  // Survey data.
+  @Input() public survey: Observable<Survey>;
   // Click event.
   @Output() private cameraClick: EventEmitter<WebcamCoordinates> = new EventEmitter<WebcamCoordinates>();
   // Calibration set event.
   @Output() private calibrationSet: EventEmitter<WebcamCoordinates> = new EventEmitter<WebcamCoordinates>();
+  // Survey reset event.
+  @Output() private surveyReset: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild('cameraImage') private cameraImage: ElementRef;
 
   public cameraImageLoaded: boolean = false;
   public cameraImageError: boolean = false;
 
-  private baseWidth: number = 0;
-  private baseHeight: number = 0;
-  private baseOffsetLeft: number = 0;
-  private baseOffsetTop: number = 0;
+  public baseWidth: number = 0;
+  public baseHeight: number = 0;
+  public baseOffsetLeft: number = 0;
+  public baseOffsetTop: number = 0;
 
   public mouseMode: MouseMode = MouseMode.NONE;
   private mouseOverlay: boolean = false;
@@ -170,6 +195,8 @@ export class WebcamComponent {
   private mouseMotors: Coordinate = {x: 0, y: 0};
 
   public arrowSteps: number = 1000;
+
+  public surveyEnabled: boolean = true;
 
   /**
    * Returns the URL of the camera image.
@@ -404,6 +431,14 @@ export class WebcamComponent {
     return {x, y};
   }
 
+  /**
+   * Maps coordinates in motor coordinate system to coordinates in browser
+   * coordinate system.
+   */
+  public mapMotorToBrowser(coordinate: Coordinate): Coordinate {
+    return this.mapWebcamToBrowser(this.mapReferenceToWebcam(this.mapMotorToReference(coordinate)));
+  }
+
   private get bbPath(): string {
     // Compute the corners of the bounding box.
     const corners = [
@@ -450,7 +485,14 @@ export class WebcamComponent {
       left: this.baseOffsetLeft + Math.max(0, centerPosition.x - centerSize.x / 2),
       top: this.baseOffsetTop + Math.max(0, centerPosition.y - centerSize.y / 2),
       width: centerSize.x,
-      height: centerSize.y
+      height: centerSize.y,
+    };
+  }
+
+  public get surveyConfig() {
+    return {
+      browserOffset: {x: this.baseOffsetLeft, y: this.baseOffsetTop},
+      mapMotorToBrowser: this.mapMotorToBrowser.bind(this),
     };
   }
 
@@ -459,5 +501,13 @@ export class WebcamComponent {
     this.baseHeight = this.cameraImage.nativeElement.offsetHeight;
     this.baseOffsetLeft = this.cameraImage.nativeElement.offsetLeft;
     this.baseOffsetTop = this.cameraImage.nativeElement.offsetTop;
+  }
+
+  public onSurveyToggleClick(): void {
+    this.surveyEnabled = !this.surveyEnabled;
+  }
+
+  public onSurveyResetClick(): void {
+    this.surveyReset.emit(null);
   }
 }

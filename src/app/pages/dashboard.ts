@@ -4,7 +4,7 @@ import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs/Observable';
 
 import {AppState, getKoruzaState} from '../reducers';
-import {getCameraCalibration, getMotors} from '../reducers/koruza';
+import {getCameraCalibration, getMotors, getSurvey} from '../reducers/koruza';
 import {KoruzaActions} from '../actions';
 
 import {WebcamCoordinates} from '../components/webcam';
@@ -23,8 +23,10 @@ import {WebcamCoordinates} from '../components/webcam';
       <koruza-webcam
         [calibration]="cameraCalibration | async"
         [motors]="motors | async"
+        [survey]="survey"
         (cameraClick)="onWebcamClick($event)"
         (calibrationSet)="onWebcamCalibrationSet($event)"
+        (surveyReset)="onWebcamSurveyReset()"
         flex
       >
       </koruza-webcam>
@@ -40,6 +42,10 @@ export class DashboardPageComponent {
   public motors = this.store
     .let(getKoruzaState())
     .let(getMotors());
+
+  public survey = this.store
+    .let(getKoruzaState())
+    .let(getSurvey());
 
   public unitStatus = this.store
     .let(getKoruzaState());
@@ -59,6 +65,10 @@ export class DashboardPageComponent {
       Math.round(coordinates.x),
       Math.round(coordinates.y))
     );
+  }
+
+  public onWebcamSurveyReset(): void {
+    this.store.dispatch(this.koruzaActions.surveyReset());
   }
 
   public onHomingClick(): void {

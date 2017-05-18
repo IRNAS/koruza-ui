@@ -53,6 +53,18 @@ export interface LedsState {
   state: boolean;
 }
 
+export interface Survey {
+  coverage: {
+    x: number;
+    y: number;
+  };
+  bins: {
+    x: number;
+    y: number;
+  };
+  data: number[][];
+}
+
 export interface KoruzaState {
   connected: boolean;
   leds: LedsState;
@@ -60,6 +72,7 @@ export interface KoruzaState {
   motors: MotorState;
   sfps: SfpStateMap;
   cameraCalibration: CameraCalibrationState;
+  survey: Survey;
   isFetching: boolean;
   lastUpdated: Date;
 }
@@ -87,6 +100,17 @@ const initialState: KoruzaState = {
     offsetX: 0,
     offsetY: 0,
     distance: 7000
+  },
+  survey: {
+    coverage: {
+      x: 10000,
+      y: 10000,
+    },
+    bins: {
+      x: 100,
+      y: 100,
+    },
+    data: [],
   },
   isFetching: false,
   lastUpdated: null
@@ -130,6 +154,23 @@ export function reducer(state = initialState, action: Action): KoruzaState {
         lastUpdated: new Date()
       });
     }
+    case KoruzaActions.SURVEY_COMPLETE: {
+      const survey = action.payload.survey;
+
+      return Object.assign({}, state, {
+        survey: {
+          coverage: {
+            x: survey.coverage.x,
+            y: survey.coverage.y,
+          },
+          bins: {
+            x: survey.bins.x,
+            y: survey.bins.y,
+          },
+          data: survey.data
+        }
+      });
+    }
     default: {
       return state;
     }
@@ -144,4 +185,9 @@ export function getCameraCalibration() {
 export function getMotors() {
   return (state: Observable<KoruzaState>) =>
     state.select(s => s.motors);
+}
+
+export function getSurvey() {
+  return (state: Observable<KoruzaState>) =>
+    state.select(s => s.survey);
 }
