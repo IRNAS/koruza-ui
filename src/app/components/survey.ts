@@ -37,15 +37,17 @@ export class SurveyHeatmapComponent implements OnInit {
 
       const origin = this.mapMotorToBrowser({x: 0, y: 0});
       const surveyBin = this.mapMotorToBrowser(survey.bins);
-      const radius = 2 * Math.max(
+      const radius = 6 * Math.max(
         surveyBin.x - origin.x,
         surveyBin.y - origin.y,
       );
 
       for (let row = 0; row < survey.data.length; row++) {
         for (let column = 0; column < survey.data[row].length; column++) {
-          const value = survey.data[row][column];
-          if (!value) continue;
+          let value = survey.data[row][column];
+          // Convert value to dBm and make it positive.
+          value = Math.max(-40, 10 * Math.log10(value / 10000)) + 40;
+          if (value <= 2) continue;
 
           const position = this.mapMotorToBrowser({
             x: ((column - (survey.bins.x / 2)) * survey.coverage.x) / (survey.bins.x / 2),

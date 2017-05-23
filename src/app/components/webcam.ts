@@ -85,6 +85,7 @@ enum MouseMode {
           <div flex class="camera-image-container">
             <div koruza-survey-heatmap
               *ngIf="surveyEnabled"
+              class="survey-heatmap"
               [survey]="survey"
               [mapMotorToBrowser]="surveyConfig.mapMotorToBrowser"
               [width]="baseWidth"
