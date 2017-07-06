@@ -2030,7 +2030,7 @@ exports = module.exports = __webpack_require__(36)(false);
 
 
 // module
-exports.push([module.i, ".camera-container {\n  text-align: center; }\n\n.camera-image-container {\n  position: relative; }\n\n.camera-center {\n  position: absolute;\n  width: 0px;\n  height: 0px;\n  border: 2px dashed red;\n  cursor: default;\n  pointer-events: none; }\n  .camera-center md-icon {\n    position: absolute;\n    color: red; }\n\n.bounding-box {\n  position: absolute;\n  left: 1%;\n  top: 0;\n  width: 98%;\n  height: 100%; }\n\n.camera {\n  width: 98%; }\n\n.mouse-coordinates {\n  cursor: default;\n  fill: lime; }\n\n.survey-heatmap {\n  z-index: 10;\n  opacity: 0.8; }\n", ""]);
+exports.push([module.i, ".camera-container {\n  text-align: center; }\n\n.camera-image-container {\n  position: relative; }\n\n.camera-center {\n  position: absolute;\n  width: 0px;\n  height: 0px;\n  border: 2px dashed red;\n  cursor: default;\n  pointer-events: none; }\n  .camera-center md-icon {\n    position: absolute;\n    color: red; }\n\n.bounding-box {\n  position: absolute;\n  left: 1%;\n  top: 0;\n  width: 98%;\n  height: 100%; }\n\n.camera {\n  width: 98%; }\n\n.mouse-coordinates {\n  cursor: default;\n  fill: lime; }\n\n.survey-heatmap {\n  z-index: 10;\n  opacity: 0.8;\n  pointer-events: none; }\n", ""]);
 
 // exports
 
