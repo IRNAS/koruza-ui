@@ -543,7 +543,7 @@ __decorate([
 StatusComponent = __decorate([
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["_11" /* Component */])({
         selector: 'koruza-status',
-        template: "\n    <div layout=\"column\" class=\"container\">\n      <!-- MCU -->\n      <div *ngIf=\"status.connected\" class=\"status ok\" flex layout=\"row\">\n        <md-icon>check_circle</md-icon>\n        <span>MCU Connected</span>\n      </div>\n\n      <div *ngIf=\"!status.connected\" class=\"status warning\" flex layout=\"row\">\n        <md-icon>warning</md-icon>\n        <span>MCU Disconnected</span>\n      </div>\n\n      <div *ngIf=\"status.connected\" flex layout=\"column\">\n        <span class=\"datum-name\">Motor X</span>\n        <span>{{status.motors.x}}</span>\n        <span class=\"datum-name\">Motor Y</span>\n        <span>{{status.motors.y}}</span>\n      </div>\n\n      <div *ngIf=\"hasErrors\" class=\"status warning\" flex layout=\"row\">\n        <md-icon>warning</md-icon>\n        <span>MCU Error</span>\n      </div>\n\n      <div *ngIf=\"hasErrors\" flex layout=\"column\">\n        <span class=\"error\" *ngFor=\"let error of errors\">{{error}}</span>\n      </div>\n\n      <!-- SFP -->\n      <div *ngIf=\"sfpConnected\" class=\"status ok\" flex layout=\"row\">\n        <md-icon>check_circle</md-icon>\n        <span>SFP Connected</span>\n      </div>\n\n      <div *ngIf=\"!sfpConnected\" class=\"status warning\" flex layout=\"row\">\n        <md-icon>warning</md-icon>\n        <span>SFP Disconnected</span>\n      </div>\n\n      <div *ngIf=\"sfpConnected\" flex layout=\"column\">\n        <span class=\"datum-name\">Serial Number</span>\n        <span>{{sfp.serialNumber}}</span>\n        <span class=\"datum-name\">TX Wavelength</span>\n        <span>{{sfp.wavelength}} nm</span>\n        <span class=\"datum-name\">RX Power</span>\n        <span>{{sfp.diagnostics.rxPower}} ({{sfp.diagnostics.rxPower | dbm}} dBm)</span>\n        <span class=\"datum-name\">TX Power</span>\n        <span>{{sfp.diagnostics.txPower}} ({{sfp.diagnostics.txPower | dbm}} dBm)</span>\n      </div>\n\n      <!-- Controls -->\n      <div *ngIf=\"sfpConnected\" class=\"status ok\" flex layout=\"row\">\n        <md-icon>settings</md-icon>\n        <span>Controls</span>\n      </div>\n\n      <div flex layout=\"row\">\n        <button md-raised-button flex=\"90\" (click)=\"homingClick.emit(null)\">Homing</button>\n        <span flex=\"10\"></span>\n      </div>\n\n      <div flex layout=\"row\">\n        <md-slide-toggle\n          [checked]=\"status.leds.state\"\n          (change)=\"ledsStateChange.emit($event.checked)\"\n        >\n          LEDs\n        </md-slide-toggle>\n      </div>\n    </div>\n  ",
+        template: "\n    <div layout=\"column\" class=\"container\">\n      <!-- Identity -->\n      <div *ngIf=\"status.serialNumber\" class=\"status ok\" flex layout=\"row\">\n        <md-icon>perm_identity</md-icon>\n        <span>Unit Identity</span>\n      </div>\n\n      <div *ngIf=\"status.serialNumber\" flex layout=\"column\">\n        <span class=\"datum-name\">Serial Number</span>\n        <span>{{status.serialNumber}}</span>\n      </div>\n\n      <!-- Network -->\n      <div *ngIf=\"status.network.ready\" class=\"status ok\" flex layout=\"row\">\n        <md-icon>network_wifi</md-icon>\n        <span>Network</span>\n      </div>\n\n      <div *ngIf=\"status.network.ready\" flex layout=\"column\">\n        <span class=\"datum-name\">IP Address</span>\n        <span>{{status.network.ipAddress}}</span>\n      </div>\n\n      <!-- MCU -->\n      <div *ngIf=\"status.connected\" class=\"status ok\" flex layout=\"row\">\n        <md-icon>check_circle</md-icon>\n        <span>MCU Connected</span>\n      </div>\n\n      <div *ngIf=\"!status.connected\" class=\"status warning\" flex layout=\"row\">\n        <md-icon>warning</md-icon>\n        <span>MCU Disconnected</span>\n      </div>\n\n      <div *ngIf=\"status.connected\" flex layout=\"column\">\n        <span class=\"datum-name\">Motor X</span>\n        <span>{{status.motors.x}}</span>\n        <span class=\"datum-name\">Motor Y</span>\n        <span>{{status.motors.y}}</span>\n      </div>\n\n      <div *ngIf=\"hasErrors\" class=\"status warning\" flex layout=\"row\">\n        <md-icon>warning</md-icon>\n        <span>MCU Error</span>\n      </div>\n\n      <div *ngIf=\"hasErrors\" flex layout=\"column\">\n        <span class=\"error\" *ngFor=\"let error of errors\">{{error}}</span>\n      </div>\n\n      <!-- SFP -->\n      <div *ngIf=\"sfpConnected\" class=\"status ok\" flex layout=\"row\">\n        <md-icon>check_circle</md-icon>\n        <span>SFP Connected</span>\n      </div>\n\n      <div *ngIf=\"!sfpConnected\" class=\"status warning\" flex layout=\"row\">\n        <md-icon>warning</md-icon>\n        <span>SFP Disconnected</span>\n      </div>\n\n      <div *ngIf=\"sfpConnected\" flex layout=\"column\">\n        <span class=\"datum-name\">Serial Number</span>\n        <span>{{sfp.serialNumber}}</span>\n        <span class=\"datum-name\">TX Wavelength</span>\n        <span>{{sfp.wavelength}} nm</span>\n        <span class=\"datum-name\">RX Power</span>\n        <span>{{sfp.diagnostics.rxPower}} ({{sfp.diagnostics.rxPower | dbm}} dBm)</span>\n        <span class=\"datum-name\">TX Power</span>\n        <span>{{sfp.diagnostics.txPower}} ({{sfp.diagnostics.txPower | dbm}} dBm)</span>\n      </div>\n\n      <!-- Controls -->\n      <div *ngIf=\"sfpConnected\" class=\"status ok\" flex layout=\"row\">\n        <md-icon>settings</md-icon>\n        <span>Controls</span>\n      </div>\n\n      <div flex layout=\"row\">\n        <button md-raised-button flex=\"90\" (click)=\"homingClick.emit(null)\">Homing</button>\n        <span flex=\"10\"></span>\n      </div>\n\n      <div flex layout=\"row\">\n        <md-slide-toggle\n          [checked]=\"status.leds.state\"\n          (change)=\"ledsStateChange.emit($event.checked)\"\n        >\n          LEDs\n        </md-slide-toggle>\n      </div>\n    </div>\n  ",
         styles: [__webpack_require__(372)],
     })
 ], StatusComponent);
@@ -2140,6 +2140,7 @@ function getKoruzaState() {
 
 
 var initialState = {
+    serialNumber: '0000',
     connected: false,
     leds: {
         state: true,
@@ -2174,6 +2175,11 @@ var initialState = {
         },
         data: [],
     },
+    network: {
+        interface: '',
+        ipAddress: '',
+        ready: false,
+    },
     isFetching: false,
     lastUpdated: null
 };
@@ -2188,6 +2194,7 @@ function reducer(state, action) {
         case __WEBPACK_IMPORTED_MODULE_1__actions__["c" /* KoruzaActions */].UPDATE_COMPLETE: {
             var status = action.payload.status;
             return Object.assign({}, state, {
+                serialNumber: status.serial_number,
                 connected: status.connected,
                 leds: {
                     state: status.leds.state,
@@ -2210,6 +2217,11 @@ function reducer(state, action) {
                     offsetX: status.camera_calibration.offset_x,
                     offsetY: status.camera_calibration.offset_y,
                     distance: status.camera_calibration.distance || 7000
+                },
+                network: {
+                    interface: status.network.interface,
+                    ipAddress: status.network.ip_address,
+                    ready: status.network.ready,
                 },
                 isFetching: false,
                 lastUpdated: new Date()
