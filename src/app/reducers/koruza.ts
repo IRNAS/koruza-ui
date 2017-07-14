@@ -53,6 +53,12 @@ export interface LedsState {
   state: boolean;
 }
 
+export interface NetworkState {
+  interface: string;
+  ipAddress: string;
+  ready: boolean;
+}
+
 export interface Survey {
   coverage: {
     x: number;
@@ -66,6 +72,7 @@ export interface Survey {
 }
 
 export interface KoruzaState {
+  serialNumber: string;
   connected: boolean;
   leds: LedsState;
   errors: ErrorState;
@@ -73,11 +80,13 @@ export interface KoruzaState {
   sfps: SfpStateMap;
   cameraCalibration: CameraCalibrationState;
   survey: Survey;
+  network: NetworkState;
   isFetching: boolean;
   lastUpdated: Date;
 }
 
 const initialState: KoruzaState = {
+  serialNumber: '0000',
   connected: false,
   leds: {
     state: true,
@@ -112,6 +121,11 @@ const initialState: KoruzaState = {
     },
     data: [],
   },
+  network: {
+    interface: '',
+    ipAddress: '',
+    ready: false,
+  },
   isFetching: false,
   lastUpdated: null
 };
@@ -127,6 +141,7 @@ export function reducer(state = initialState, action: Action): KoruzaState {
       const status = action.payload.status;
 
       return Object.assign({}, state, {
+        serialNumber: status.serial_number,
         connected: status.connected,
         leds: {
           state: status.leds.state,
@@ -149,6 +164,11 @@ export function reducer(state = initialState, action: Action): KoruzaState {
           offsetX: status.camera_calibration.offset_x,
           offsetY: status.camera_calibration.offset_y,
           distance: status.camera_calibration.distance || 7000
+        },
+        network: {
+          interface: status.network.interface,
+          ipAddress: status.network.ip_address,
+          ready: status.network.ready,
         },
         isFetching: false,
         lastUpdated: new Date()

@@ -14,6 +14,28 @@ const ERROR_ENCODER_Y_MAG_HIGH = 1 << 5;
   selector: 'koruza-status',
   template: `
     <div layout="column" class="container">
+      <!-- Identity -->
+      <div *ngIf="status.serialNumber" class="status ok" flex layout="row">
+        <md-icon>perm_identity</md-icon>
+        <span>Unit Identity</span>
+      </div>
+
+      <div *ngIf="status.serialNumber" flex layout="column">
+        <span class="datum-name">Serial Number</span>
+        <span>{{status.serialNumber}}</span>
+      </div>
+
+      <!-- Network -->
+      <div *ngIf="status.network.ready" class="status ok" flex layout="row">
+        <md-icon>network_wifi</md-icon>
+        <span>Network</span>
+      </div>
+
+      <div *ngIf="status.network.ready" flex layout="column">
+        <span class="datum-name">IP Address</span>
+        <span>{{status.network.ipAddress}}</span>
+      </div>
+
       <!-- MCU -->
       <div *ngIf="status.connected" class="status ok" flex layout="row">
         <md-icon>check_circle</md-icon>
