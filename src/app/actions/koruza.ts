@@ -84,4 +84,11 @@ export class KoruzaActions {
       type: KoruzaActions.SURVEY_RESET
     };
   }
+
+  static START_UPGRADE = 'koruza.start_upgrade';
+  public startUpgrade(): Action {
+    return {
+      type: KoruzaActions.START_UPGRADE
+    };
+  }
 }

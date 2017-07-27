@@ -4,6 +4,7 @@ import {Effect, Actions} from '@ngrx/effects';
 import {Observable} from 'rxjs/Observable';
 import {timer} from 'rxjs/observable/timer';
 
+import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/zip';
 
@@ -141,5 +142,16 @@ export class KoruzaEffects {
       this.ubus.call('koruza.reset_survey')
         .map(() => this.actions.survey())
         .catch(() => Observable.of(this.actions.survey()))
+    );
+
+  /**
+   * Handle software upgrade command.
+   */
+  @Effect() startUpgrade = this.updates
+    .ofType(KoruzaActions.START_UPGRADE)
+    .switchMap(action =>
+      this.ubus.call('koruza.upgrade')
+        .map(() => this.actions.update())
+        .catch(() => Observable.of(this.actions.update()))
     );
 }

@@ -3,6 +3,7 @@ import {Routes}  from '@angular/router';
 import {AuthenticationGuard} from './guards/authentication';
 import {LoginPageComponent} from './pages/login';
 import {DashboardPageComponent} from './pages/dashboard';
+import {UpgradePageComponent} from './pages/upgrade';
 
 export const routes: Routes = [
   // Default route.
@@ -10,5 +11,6 @@ export const routes: Routes = [
 
   // Pages.
   {path: 'login', component: LoginPageComponent},
-  {path: 'dashboard', component: DashboardPageComponent, canActivate: [AuthenticationGuard]}
+  {path: 'dashboard', component: DashboardPageComponent, canActivate: [AuthenticationGuard]},
+  {path: 'upgrade', component: UpgradePageComponent, canActivate: [AuthenticationGuard]}
 ];

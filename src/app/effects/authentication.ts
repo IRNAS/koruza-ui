@@ -3,6 +3,8 @@ import {Router} from '@angular/router';
 import {Effect, Actions} from '@ngrx/effects';
 import {Observable} from 'rxjs/Observable';
 
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/switchMap';
 
 import {UbusService, LocalStorageService} from '../services';
