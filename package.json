@@ -1,7 +1,7 @@
 {
   "name": "koruza-ui",
   "version": "0.0.0",
-  "license": "MIT",
+  "license": "GPLv3",
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
