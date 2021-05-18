@@ -1,5 +1,8 @@
 # KORUZA UI
 
+## KORUZA v2 Pro UI
+This is an old version of the KORUZA Graphical User Interface. A new version of the Graphical User Interface has been developed and is available at https://github.com/IRNAS/koruza-v2-ui.
+
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
